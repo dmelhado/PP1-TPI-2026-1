@@ -12,6 +12,7 @@ Instalar las siguientes dependencias:
 * **Java JDK 25+** (Recomendado Eclipse Temurin 25)
 * **Node.js 24 (LTS)**
 * **npm** (incluido con Node.js)
+* **SMILE** (incluido en este repo)
 * **Git**
 
 Opcional pero recomendado:
