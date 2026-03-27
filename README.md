@@ -9,7 +9,7 @@ Trabajo Practico Inicial de Proyecto Profesional I de la UNGS. Cursada 2026-1.
 
 Instalar las siguientes dependencias:
 
-* **Java JDK 17+**
+* **Java JDK 25+** (Recomendado Eclipse Temurin 25)
 * **Node.js 24 (LTS)**
 * **npm** (incluido con Node.js)
 * **Git**
@@ -56,6 +56,16 @@ La página web estará disponible en:
 http://localhost:5173
 ```
 
-## Notas
+### Notas
 * Asegurarse de que el backend esté corriendo antes de usar el frontend.
 * Verificar que las URLs de conexión (API) coincidan entre frontend y backend.
+
+## Como entrenar el modelo de ML?
+
+```bash
+cd ML
+javac -cp "lib/*" -d out src\TrainModel.java
+java -cp "out;lib/*" TrainModel
+```
+
+La ejecución generará el archivo "model.ser" dentro de la carpeta ML.
