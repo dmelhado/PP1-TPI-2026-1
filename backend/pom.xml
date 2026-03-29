@@ -61,11 +61,32 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- Dependencia para Swagger-->
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 			<version>2.3.0</version>
 		</dependency>
+		
+		<!-- Dependencia para SMILE (para el modelo de ML) -->
+		<dependency>
+			<groupId>com.github.haifengl</groupId>
+			<artifactId>smile-core</artifactId>
+			<version>5.2.2</version>
+		</dependency>
+
+		<!-- Dependencia para Apache Commons CSV -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-csv</artifactId>
+			<version>1.10.0</version>
+		</dependency>
+		<dependency>
+    		<groupId>commons-io</groupId>
+    		<artifactId>commons-io</artifactId>
+    		<version>2.15.1</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>

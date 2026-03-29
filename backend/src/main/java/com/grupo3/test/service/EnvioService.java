@@ -14,16 +14,31 @@ public class EnvioService {
 
     private final EnvioRepository envioRepo;
     private final HistorialEstadoRepository historialEstadoRepo;
+    private final PrioridadService prioridadService;
 
-    public EnvioService(EnvioRepository envioRepo, HistorialEstadoRepository historialEstadoRepo) {
+    public EnvioService(EnvioRepository envioRepo, HistorialEstadoRepository historialEstadoRepo, PrioridadService prioridadService) {
         this.envioRepo = envioRepo;
         this.historialEstadoRepo = historialEstadoRepo;
+        this.prioridadService = prioridadService;
     }
 
     public Envio crearEnvio(Envio envio) {
         envio.setTrackingId(generarTrackingId());
         envio.setEstadoEnvio(EstadoEnvio.PENDIENTE);
         envio.setFechaCreacion(LocalDateTime.now());
+
+        Prioridad prioridad = prioridadService.predecirPrioridad(
+                envio.getDistanciaEstimada() != null ? envio.getDistanciaEstimada() : 500,
+                envio.getTipoEnvio() != null ? envio.getTipoEnvio() : TipoEnvio.NORMAL,
+                // TODO: VER ventana horas, se asume en 24
+                24,
+                envio.getPeso() != null ? envio.getPeso().intValue() : 5,
+                envio.getRestricciones() != null && envio.getRestricciones().contains("FRAGIL"),
+                envio.getRestricciones() != null && envio.getRestricciones().contains("FRIO"),
+                // TODO: VER saturación, por ahora asume
+                "baja"
+        );
+        envio.setPrioridadEnvio(prioridad);
 
         return envioRepo.save(envio);
     }
