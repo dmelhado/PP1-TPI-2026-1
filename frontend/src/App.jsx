@@ -1,28 +1,21 @@
 import { useState } from "react";
+import Login from "./Login";
+import OperarioDashboard from "./OperarioDashboard";
+//import SupervisorDashboard from "./SupervisorDashboard";
 
 function App() {
-  const [message, setMessage] = useState("");
+  const [user, setUser] = useState(null);
 
-  const hitBackend = async () => {
-    try {
-      const response = await fetch("http://localhost:8080/api/ouch");
-      const text = await response.text();
-      setMessage(text);
-    } catch (error) {
-      console.error(error);
-      setMessage("ERROR: Backend is on fire");
-    }
-  };
+  if (!user) return <Login onLogin={setUser} />;
 
-  return (
-    <div style={{ padding: "40px" }}>
-      <button onClick={hitBackend}>
-        Do NOT press this button
-      </button>
+  if (user.role === "operario") {
+    return <OperarioDashboard user={user} />;
+  }
 
-      <p>{message}</p>
-    </div>
-  );
+  /*
+  if (user.role === "supervisor") {
+    return <SupervisorDashboard user={user} />;
+  }*/
 }
 
 export default App;
