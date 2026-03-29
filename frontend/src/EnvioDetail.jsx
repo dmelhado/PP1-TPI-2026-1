@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "./envioDetail.css";
 
-export default function EnvioDetail({ user }) {
+export default function EnvioDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [shipment, setShipment] = useState(null);
