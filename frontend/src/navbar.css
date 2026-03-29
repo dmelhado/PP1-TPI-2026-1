@@ -1,0 +1,56 @@
+.top-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #d32f2f; /* Red header */
+  color: white;
+  padding: 10px 40px;
+  height: 60px;
+}
+
+.nav-left, .nav-links {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.nav-logo { display: flex; align-items: center; gap: 10px; }
+.logo-text { display: flex; flex-direction: column; line-height: 1.1; }
+.logo-text strong { font-size: 1.2rem; }
+.logo-text span { font-size: 0.7rem; opacity: 0.9; }
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+.nav-links a:hover { opacity: 1; }
+
+.nav-right { display: flex; align-items: center; gap: 20px; }
+
+.user-profile {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 5px 15px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-info { display: flex; flex-direction: column; font-size: 0.8rem; }
+
+.logout-btn {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}

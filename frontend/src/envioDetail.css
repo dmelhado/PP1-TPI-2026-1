@@ -1,0 +1,71 @@
+.details-page {
+  padding: 20px;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+.card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+}
+
+.back-link {
+  cursor: pointer;
+  color: #666;
+  margin-bottom: 15px;
+  font-weight: 500;
+}
+
+.back-link:hover { color: #000; }
+
+.flex-row { display: flex; gap: 20px; margin-top: 10px; }
+
+.badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: bold;
+}
+
+.status-transit { background: #efe5ff; color: #7b2cbf; }
+.priority-urgent { background: #fff3e0; color: #e65100; border: 1px solid #ffe0b2; }
+
+/* Route visualization */
+.route-line {
+  width: 2px;
+  height: 30px;
+  background: linear-gradient(to bottom, #7b2cbf, #2dc653);
+  margin-left: 10px;
+}
+
+.route-step p { font-weight: bold; color: #1a1a1a; margin: 4px 0; }
+.route-step label { font-size: 0.75rem; color: #666; text-transform: uppercase; }
+
+.stat-box {
+  background: #fff5f5;
+  padding: 15px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.notes-box {
+  background: #fffdeb;
+  border: 1px solid #ffe58f;
+  padding: 15px;
+  border-radius: 8px;
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
