@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 import { useState, useEffect } from "react";
 import axios from "axios";
 import "./operarioDashboard.css";
@@ -175,7 +177,12 @@ export default function OperarioDashboard() {
                       {s.status}
                     </span>
                   </td>
-                  <td className="action">Ver detalle →</td>
+                  <td className="action">
+                    {/* Wrap the text in a Link component */}
+                    <Link to={`/shipment/${s.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                      Ver detalle →
+                    </Link>
+                  </td>
                 </tr>
               ))
             ) : (

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import Login from "./Login";
 import OperarioDashboard from "./OperarioDashboard";
-// import SupervisorDashboard from "./SupervisorDashboard";
+import EnvioDetail from "./EnvioDetail"; // Make sure this is imported!
 
 function App() {
   const [user, setUser] = useState(null);
@@ -10,34 +10,29 @@ function App() {
 
   const handleLogin = (userData) => {
     setUser(userData);
-    navigate("/dashboard"); // Move the user to the dashboard route after login
+    navigate("/dashboard");
   };
 
   return (
     <Routes>
-      {/* Public Route */}
+      {/* 1. LOGIN ROUTE: If already logged in, skip login screen */}
       <Route 
         path="/login" 
         element={!user ? <Login onLogin={handleLogin} /> : <Navigate to="/dashboard" />} 
       />
 
-      {/* Protected Route */}
+      {/* 2. PROTECTED ROUTES: Only show if user exists */}
       <Route 
         path="/dashboard" 
-        element={
-          user ? (
-            user.role === "operario" ? (
-              <OperarioDashboard user={user} />
-            ) : (
-              <div>Supervisor Dashboard Coming Soon</div>
-            )
-          ) : (
-            <Navigate to="/login" /> // Redirect to login if trying to access dashboard while logged out
-          )
-        } 
+        element={user ? <OperarioDashboard user={user} /> : <Navigate to="/login" />} 
       />
 
-      {/* Default Route: Redirect anything else to login */}
+      <Route 
+        path="/shipment/:id" 
+        element={user ? <EnvioDetail user={user} /> : <Navigate to="/login" />} 
+      />
+
+      {/* 3. FALLBACK: Send everything else to login */}
       <Route path="*" element={<Navigate to="/login" />} />
     </Routes>
   );
