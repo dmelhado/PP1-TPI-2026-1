@@ -29,6 +29,9 @@ public class EnvioService {
     }
 
     public Envio crearEnvio(Envio envio) {
+        validarDireccion(envio.getOrigen(), "origen");
+        validarDireccion(envio.getDestino(), "destino");
+
         envio.setTrackingId(generarTrackingId());
         envio.setEstadoEnvio(EstadoEnvio.PENDIENTE);
         envio.setFechaCreacion(LocalDateTime.now());
@@ -47,6 +50,12 @@ public class EnvioService {
         envio.setPrioridadEnvio(prioridad);
 
         return envioRepo.save(envio);
+    }
+
+    private void validarDireccion(String direccion, String campo) {
+        if (direccion == null || direccion.trim().length() < 6) {
+            throw new IllegalArgumentException("El campo '" + campo + "' debe tener al menos 6 caracteres");
+        }
     }
 
     private String generarTrackingId() {
