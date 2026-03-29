@@ -3,6 +3,7 @@ import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import Login from "./Login";
 import OperarioDashboard from "./OperarioDashboard";
 import EnvioDetail from "./EnvioDetail"; // Make sure this is imported!
+import Navbar from "./Navbar";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -14,6 +15,9 @@ function App() {
   };
 
   return (
+    <>
+    {user && <Navbar user={user} onLogout={setUser} />}
+
     <Routes>
       {/* 1. LOGIN ROUTE: If already logged in, skip login screen */}
       <Route 
@@ -35,6 +39,7 @@ function App() {
       {/* 3. FALLBACK: Send everything else to login */}
       <Route path="*" element={<Navigate to="/login" />} />
     </Routes>
+    </>
   );
 }
 

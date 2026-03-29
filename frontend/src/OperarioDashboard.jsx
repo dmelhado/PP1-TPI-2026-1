@@ -105,16 +105,6 @@ export default function OperarioDashboard() {
 
   return (
     <div className="dashboard">
-      {/* HEADER */}
-      <div className="topbar">
-        <div className="brand">
-          📦 <span>LogiTrack</span>
-        </div>
-        <div className="user-box">
-          {user}
-          <span>Operario</span>
-        </div>
-      </div>
 
       {/* HERO */}
       <div className="hero">
