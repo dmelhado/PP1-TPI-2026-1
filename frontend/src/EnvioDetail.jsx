@@ -1,35 +1,73 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import api from "./services/api";
 import "./envioDetail.css";
 
-export default function EnvioDetail() {
+const ESTADOS_DISPONIBLES = ["PENDIENTE", "EN_VIAJE", "ENTREGADO", "CANCELADO"];
+
+export default function EnvioDetail({ user }) {
   const { id } = useParams();
   const navigate = useNavigate();
   const [shipment, setShipment] = useState(null);
+  const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedEstado, setSelectedEstado] = useState("PENDIENTE");
+  const [motivo, setMotivo] = useState("");
+  const [updatingEstado, setUpdatingEstado] = useState(false);
+  const [estadoMsg, setEstadoMsg] = useState("");
 
   useEffect(() => {
-    const fetchShipment = async () => {
+    const fetchShipmentAndHistory = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`http://localhost:8080/api/envios/${id}`);
-        
-        if (!response.ok) {
-          throw new Error("No se pudo encontrar el envío.");
-        }
-        
-        const data = await response.json();
-        setShipment(data);
+        setError(null);
+
+        const [shipmentResponse, historyResponse] = await Promise.all([
+          api.get(`/envios/${id}`),
+          api.get(`/envios/${id}/historial`).catch(() => ({ data: [] })),
+        ]);
+
+        setShipment(shipmentResponse.data);
+        setSelectedEstado(shipmentResponse.data.estadoEnvio || "PENDIENTE");
+        setHistory(Array.isArray(historyResponse.data) ? historyResponse.data : []);
       } catch (err) {
-        setError(err.message);
+        setError(err?.response?.data?.message || err.message || "Error al cargar el envío");
       } finally {
         setLoading(false);
       }
     };
 
-    if (id) fetchShipment();
+    if (id) fetchShipmentAndHistory();
   }, [id]);
+
+  const handleUpdateEstado = async (e) => {
+    e.preventDefault();
+    setUpdatingEstado(true);
+    setEstadoMsg("");
+
+    try {
+      await api.patch(`/envios/${id}/estado`, {
+        estado: selectedEstado,
+        motivo: motivo.trim() || "Actualizacion manual desde web",
+        usuario: user?.username || "operario-web",
+      });
+
+      const [shipmentResponse, historyResponse] = await Promise.all([
+        api.get(`/envios/${id}`),
+        api.get(`/envios/${id}/historial`).catch(() => ({ data: [] })),
+      ]);
+
+      setShipment(shipmentResponse.data);
+      setHistory(Array.isArray(historyResponse.data) ? historyResponse.data : []);
+      setMotivo("");
+      setEstadoMsg("Estado actualizado correctamente.");
+    } catch (err) {
+      setEstadoMsg(err?.response?.data?.message || "No se pudo actualizar el estado.");
+    } finally {
+      setUpdatingEstado(false);
+    }
+  };
 
   if (loading) return <div className="loading">Cargando detalles del envío...</div>;
   if (error) return <div className="error-msg">Error: {error} <button onClick={() => navigate("/dashboard")}>Volver</button></div>;
@@ -113,6 +151,37 @@ export default function EnvioDetail() {
               </div>
             )}
           </section>
+
+          <section className="card info-section">
+            <h3>🔄 Actualización de Estado</h3>
+            <form className="status-form" onSubmit={handleUpdateEstado}>
+              <label>Nuevo estado</label>
+              <select
+                value={selectedEstado}
+                onChange={(e) => setSelectedEstado(e.target.value)}
+                disabled={updatingEstado}
+              >
+                {ESTADOS_DISPONIBLES.map((estado) => (
+                  <option key={estado} value={estado}>
+                    {estado}
+                  </option>
+                ))}
+              </select>
+
+              <label>Motivo del cambio</label>
+              <textarea
+                value={motivo}
+                onChange={(e) => setMotivo(e.target.value)}
+                placeholder="Ej: Entregado al destinatario"
+                disabled={updatingEstado}
+              />
+
+              <button type="submit" disabled={updatingEstado}>
+                {updatingEstado ? "Actualizando..." : "Guardar estado"}
+              </button>
+            </form>
+            {estadoMsg && <p className="status-msg">{estadoMsg}</p>}
+          </section>
         </div>
 
         <div className="column-side">
@@ -138,6 +207,25 @@ export default function EnvioDetail() {
               <label>Tipo de Envío</label>
               <p>{shipment.tipoEnvio}</p>
             </div>
+          </section>
+
+          <section className="card info-section">
+            <h3>🕘 Historial de Estados</h3>
+            {history.length === 0 ? (
+              <p className="history-empty">Sin cambios registrados.</p>
+            ) : (
+              <ul className="history-list">
+                {history.map((item) => (
+                  <li key={item.id}>
+                    <strong>{item.estadoAnterior} → {item.estadoNuevo}</strong>
+                    <span>{item.motivoCambio || "Sin motivo"}</span>
+                    <small>
+                      {item.cambiadoPor || "sistema"} - {new Date(item.fechaCambio).toLocaleString()}
+                    </small>
+                  </li>
+                ))}
+              </ul>
+            )}
           </section>
         </div>
       </div>

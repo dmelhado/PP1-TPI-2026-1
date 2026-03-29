@@ -39,15 +39,18 @@ public class EnvioController {
     }
 
     @PatchMapping("/{trackingId}/estado")
-    public ResponseEntity<Envio> cambiarEstadoEnvio( @PathVariable String trackingId, @RequestBody Map<String, String> body) {
+    public ResponseEntity<?> cambiarEstadoEnvio( @PathVariable String trackingId, @RequestBody Map<String, String> body) {
+        try {
+            EstadoEnvio nuevoEstado = EstadoEnvio.valueOf(body.get("estado"));
+            String motivoCambio = body.get("motivo");
+            String cambiadoPor = body.get("usuario");
 
-        EstadoEnvio nuevoEstado = EstadoEnvio.valueOf(body.get("estado"));
-        String motivoCambio = body.get("motivo");
-        String cambiadoPor = body.get("usuario");
-
-        return envioService.actualizarEstadoEnvio(trackingId, nuevoEstado, motivoCambio, cambiadoPor)
-            .map(ResponseEntity::ok)
-            .orElse(ResponseEntity.notFound().build());
+            return envioService.actualizarEstadoEnvio(trackingId, nuevoEstado, motivoCambio, cambiadoPor)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+        } catch (IllegalArgumentException | IllegalStateException ex) {
+            return ResponseEntity.badRequest().body(Map.of("message", ex.getMessage()));
+        }
 
     }
 

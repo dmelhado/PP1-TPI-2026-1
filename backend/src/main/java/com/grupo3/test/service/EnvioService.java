@@ -1,12 +1,18 @@
 package com.grupo3.test.service;
 
-import com.grupo3.test.model.*;
-import com.grupo3.test.repository.EnvioRepository;
-import com.grupo3.test.repository.HistorialEstadoRepository;
-import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
+import com.grupo3.test.model.Envio;
+import com.grupo3.test.model.EstadoEnvio;
+import com.grupo3.test.model.HistorialEstado;
+import com.grupo3.test.model.Prioridad;
+import com.grupo3.test.model.TipoEnvio;
+import com.grupo3.test.repository.EnvioRepository;
+import com.grupo3.test.repository.HistorialEstadoRepository;
 
 
 @Service
@@ -65,6 +71,7 @@ public class EnvioService {
         return envioRepo.findByTrackingId(trackingId).map(envio -> {
 
             EstadoEnvio estadoAnterior = envio.getEstadoEnvio();
+            validarTransicionEstado(estadoAnterior, nuevoEstado);
 
             envio.setEstadoEnvio(nuevoEstado);
             envioRepo.save(envio);
@@ -80,6 +87,26 @@ public class EnvioService {
 
             return envio;
         });
+    }
+
+    private void validarTransicionEstado(EstadoEnvio estadoActual, EstadoEnvio nuevoEstado) {
+        if (estadoActual == null || nuevoEstado == null) {
+            throw new IllegalArgumentException("Estado actual o nuevo estado invalido");
+        }
+
+        if (estadoActual == nuevoEstado) {
+            return;
+        }
+        if ((estadoActual == EstadoEnvio.EN_VIAJE
+                || estadoActual == EstadoEnvio.ENTREGADO
+                || estadoActual == EstadoEnvio.CANCELADO)
+                && nuevoEstado == EstadoEnvio.PENDIENTE) {
+            throw new IllegalStateException("No se puede volver a PENDIENTE desde " + estadoActual);
+        }
+
+        if (estadoActual == EstadoEnvio.CANCELADO || estadoActual == EstadoEnvio.ENTREGADO) {
+            throw new IllegalStateException("No se puede cambiar el estado de un envio " + estadoActual);
+        }
     }
 
     public List<HistorialEstado> verHistorialEstado(String trackingId) {
