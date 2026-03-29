@@ -17,6 +17,7 @@ public class Envio {
     private String creadoPor;
     private LocalDateTime fechaCreacion;
     private LocalDateTime fechaEstimadaEntrega;
+    private Integer distanciaEstimada;
 
     @Enumerated(EnumType.STRING)
     private EstadoEnvio estadoEnvio;
