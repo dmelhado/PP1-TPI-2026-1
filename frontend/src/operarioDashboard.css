@@ -1,0 +1,113 @@
+.dashboard {
+  background: #f5f5f5;
+  min-height: 100vh;
+}
+
+/* TOP BAR */
+.topbar {
+  background: #d90000;
+  color: white;
+  padding: 15px 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.brand span {
+  font-weight: bold;
+  margin-left: 8px;
+}
+
+.user-box {
+  background: rgba(255,255,255,0.2);
+  padding: 8px 12px;
+  border-radius: 10px;
+  display: flex;
+  gap: 10px;
+}
+
+/* HERO */
+.hero {
+  background: #d90000;
+  color: white;
+  margin: 20px;
+  padding: 25px;
+  border-radius: 15px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.date-box {
+  background: rgba(255,255,255,0.2);
+  padding: 10px;
+  border-radius: 10px;
+  text-align: right;
+}
+
+/* STATS */
+.stats {
+  display: flex;
+  gap: 15px;
+  margin: 20px;
+}
+
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+  flex: 1;
+}
+
+/* TABLE */
+.table {
+  background: white;
+  margin: 20px;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+  background: #f0dede;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  text-align: left;
+  padding: 12px;
+  font-size: 12px;
+  color: #666;
+}
+
+td {
+  padding: 12px;
+  border-top: 1px solid #eee;
+}
+
+/* STATUS */
+.status {
+  padding: 5px 10px;
+  border-radius: 10px;
+  font-size: 12px;
+}
+
+.status.En\ Tránsito {
+  background: #e6d8ff;
+  color: purple;
+}
+
+.status.Entregado {
+  background: #d4f5df;
+  color: green;
+}
+
+.action {
+  color: red;
+  cursor: pointer;
+}

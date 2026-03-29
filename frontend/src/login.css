@@ -12,7 +12,7 @@ body {
   margin: 0;
 }
 
-.container {
+.login-container {
   min-height: 100vh; /* 👈 instead of height */
   width: 100%;
 
@@ -22,7 +22,7 @@ body {
   justify-content: center;
 }
 
-.card {
+.login-card {
   background: #f2f2f2;
   padding: 40px;
   border-radius: 20px;
