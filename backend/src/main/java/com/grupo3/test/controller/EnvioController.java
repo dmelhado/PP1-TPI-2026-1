@@ -1,11 +1,22 @@
 package com.grupo3.test.controller;
 
-import com.grupo3.test.model.*;
-import com.grupo3.test.service.EnvioService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import java .util.List;
+import java.util.List;
 import java.util.Map;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind .annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.grupo3.test.model.Envio;
+import com.grupo3.test.model.EstadoEnvio;
+import com.grupo3.test.model.HistorialEstado;
+import com.grupo3.test.service.EnvioService;
 
 
 @RestController
@@ -33,21 +44,28 @@ public class EnvioController {
     }
 
     @PostMapping
-    public ResponseEntity<Envio> crearEnvio(@RequestBody Envio envio) {
-        Envio nuevoEnvio = envioService.crearEnvio(envio);
-        return ResponseEntity.ok(nuevoEnvio);
+    public ResponseEntity<?> crearEnvio(@RequestBody Envio envio) {
+        try {
+            Envio nuevoEnvio = envioService.crearEnvio(envio);
+            return ResponseEntity.ok(nuevoEnvio);
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.badRequest().body(Map.of("message", ex.getMessage()));
+        }
     }
 
     @PatchMapping("/{trackingId}/estado")
-    public ResponseEntity<Envio> cambiarEstadoEnvio( @PathVariable String trackingId, @RequestBody Map<String, String> body) {
+    public ResponseEntity<?> cambiarEstadoEnvio( @PathVariable String trackingId, @RequestBody Map<String, String> body) {
+        try {
+            EstadoEnvio nuevoEstado = EstadoEnvio.valueOf(body.get("estado"));
+            String motivoCambio = body.get("motivo");
+            String cambiadoPor = body.get("usuario");
 
-        EstadoEnvio nuevoEstado = EstadoEnvio.valueOf(body.get("estado"));
-        String motivoCambio = body.get("motivo");
-        String cambiadoPor = body.get("usuario");
-
-        return envioService.actualizarEstadoEnvio(trackingId, nuevoEstado, motivoCambio, cambiadoPor)
-            .map(ResponseEntity::ok)
-            .orElse(ResponseEntity.notFound().build());
+            return envioService.actualizarEstadoEnvio(trackingId, nuevoEstado, motivoCambio, cambiadoPor)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+        } catch (IllegalArgumentException | IllegalStateException ex) {
+            return ResponseEntity.badRequest().body(Map.of("message", ex.getMessage()));
+        }
 
     }
 

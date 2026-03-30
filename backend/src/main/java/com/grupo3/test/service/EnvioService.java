@@ -1,12 +1,18 @@
 package com.grupo3.test.service;
 
-import com.grupo3.test.model.*;
-import com.grupo3.test.repository.EnvioRepository;
-import com.grupo3.test.repository.HistorialEstadoRepository;
-import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
+import com.grupo3.test.model.Envio;
+import com.grupo3.test.model.EstadoEnvio;
+import com.grupo3.test.model.HistorialEstado;
+import com.grupo3.test.model.Prioridad;
+import com.grupo3.test.model.TipoEnvio;
+import com.grupo3.test.repository.EnvioRepository;
+import com.grupo3.test.repository.HistorialEstadoRepository;
 
 
 @Service
@@ -14,18 +20,42 @@ public class EnvioService {
 
     private final EnvioRepository envioRepo;
     private final HistorialEstadoRepository historialEstadoRepo;
+    private final PrioridadService prioridadService;
 
-    public EnvioService(EnvioRepository envioRepo, HistorialEstadoRepository historialEstadoRepo) {
+    public EnvioService(EnvioRepository envioRepo, HistorialEstadoRepository historialEstadoRepo, PrioridadService prioridadService) {
         this.envioRepo = envioRepo;
         this.historialEstadoRepo = historialEstadoRepo;
+        this.prioridadService = prioridadService;
     }
 
     public Envio crearEnvio(Envio envio) {
+        validarDireccion(envio.getOrigen(), "origen");
+        validarDireccion(envio.getDestino(), "destino");
+
         envio.setTrackingId(generarTrackingId());
         envio.setEstadoEnvio(EstadoEnvio.PENDIENTE);
         envio.setFechaCreacion(LocalDateTime.now());
 
+        Prioridad prioridad = prioridadService.predecirPrioridad(
+                envio.getDistanciaEstimada() != null ? envio.getDistanciaEstimada() : 500,
+                envio.getTipoEnvio() != null ? envio.getTipoEnvio() : TipoEnvio.NORMAL,
+                // TODO: VER ventana horas, se asume en 24
+                24,
+                envio.getPeso() != null ? envio.getPeso().intValue() : 5,
+                envio.getRestricciones() != null && envio.getRestricciones().contains("FRAGIL"),
+                envio.getRestricciones() != null && envio.getRestricciones().contains("FRIO"),
+                // TODO: VER saturación, por ahora asume
+                "baja"
+        );
+        envio.setPrioridadEnvio(prioridad);
+
         return envioRepo.save(envio);
+    }
+
+    private void validarDireccion(String direccion, String campo) {
+        if (direccion == null || direccion.trim().length() < 6) {
+            throw new IllegalArgumentException("El campo '" + campo + "' debe tener al menos 6 caracteres");
+        }
     }
 
     private String generarTrackingId() {
@@ -50,6 +80,7 @@ public class EnvioService {
         return envioRepo.findByTrackingId(trackingId).map(envio -> {
 
             EstadoEnvio estadoAnterior = envio.getEstadoEnvio();
+            validarTransicionEstado(estadoAnterior, nuevoEstado);
 
             envio.setEstadoEnvio(nuevoEstado);
             envioRepo.save(envio);
@@ -65,6 +96,26 @@ public class EnvioService {
 
             return envio;
         });
+    }
+
+    private void validarTransicionEstado(EstadoEnvio estadoActual, EstadoEnvio nuevoEstado) {
+        if (estadoActual == null || nuevoEstado == null) {
+            throw new IllegalArgumentException("Estado actual o nuevo estado invalido");
+        }
+
+        if (estadoActual == nuevoEstado) {
+            return;
+        }
+        if ((estadoActual == EstadoEnvio.EN_VIAJE
+                || estadoActual == EstadoEnvio.ENTREGADO
+                || estadoActual == EstadoEnvio.CANCELADO)
+                && nuevoEstado == EstadoEnvio.PENDIENTE) {
+            throw new IllegalStateException("No se puede volver a PENDIENTE desde " + estadoActual);
+        }
+
+        if (estadoActual == EstadoEnvio.CANCELADO || estadoActual == EstadoEnvio.ENTREGADO) {
+            throw new IllegalStateException("No se puede cambiar el estado de un envio " + estadoActual);
+        }
     }
 
     public List<HistorialEstado> verHistorialEstado(String trackingId) {
