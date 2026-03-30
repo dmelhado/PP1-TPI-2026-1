@@ -38,11 +38,8 @@ public class EnvioService {
 
     // Defaults (cleaner)
     int distancia = Optional.ofNullable(envio.getDistanciaEstimada()).orElse(500);
-    TipoEnvio tipo = Boolean.TRUE.equals(envio.getTipoEnvio())
-        ? TipoEnvio.EXPRESS
-        : TipoEnvio.NORMAL;
+    TipoEnvio tipo = envio.getTipoEnvio();
 
-    envio.setTipoEnvio(tipo);
 
     int volumen = Optional.ofNullable(envio.getVolumen()).orElse(5);
 
@@ -54,7 +51,7 @@ public class EnvioService {
 
     Prioridad prioridad = prioridadService.predecirPrioridad(
         distancia,
-        tipo,
+        tipo.getCode(),
         ventanaHoras,
         volumen,
         fragil,

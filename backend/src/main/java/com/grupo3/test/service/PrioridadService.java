@@ -36,7 +36,7 @@ public class PrioridadService {
     }
   }
 
-  public Prioridad predecirPrioridad(int distanciaKm, TipoEnvio tipoEnvio,
+  public Prioridad predecirPrioridad(int distanciaKm, int tipoEnvio,
       int ventanaHoras, int volumen,
       boolean fragil, boolean frio,
       int saturacionInt) {
@@ -48,7 +48,7 @@ public class PrioridadService {
 
     Object[] valores = {
         distanciaKm,
-        tipoEnvio.getCode(),
+        tipoEnvio,
         ventanaHoras,
         volumen,
         fragil ? 1 : 0,

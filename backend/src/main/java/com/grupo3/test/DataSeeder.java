@@ -21,7 +21,7 @@ public class DataSeeder implements CommandLineRunner {
           "Falso 123", "Falso 456", "Operario X", 
           "Nombre Comprador", "12341234", 
           "Sin notas", 420, 
-          TipoEnvio.NORMAL, 
+          0, 
           24, 
           20, 
           false, 
@@ -42,7 +42,7 @@ public class DataSeeder implements CommandLineRunner {
         String notasAdicionales,
 
         Integer distancia,
-        TipoEnvio tipoEnvio,
+        Integer tipoEnvio,
         Integer ventanaHoras,
         Integer volumen,
         Boolean frio,
@@ -60,7 +60,7 @@ public class DataSeeder implements CommandLineRunner {
         envio.setNotasAdicionales(notasAdicionales);
 
         envio.setDistanciaEstimada(distancia);
-        envio.setTipoEnvio(tipoEnvio);
+        envio.setTipoEnvio(TipoEnvio.fromCode(tipoEnvio));
         envio.setVentanaHoras(ventanaHoras);
         envio.setVolumen(volumen);
         envio.setFrio(frio);
