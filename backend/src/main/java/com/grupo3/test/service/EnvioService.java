@@ -27,6 +27,8 @@ public class EnvioService {
     this.envioRepo = envioRepo;
     this.historialEstadoRepo = historialEstadoRepo;
     this.prioridadService = prioridadService;
+
+    System.out.println("EnvioService cargado correctamente");
   }
 
   public Envio crearEnvio(Envio envio) {
@@ -40,18 +42,20 @@ public class EnvioService {
         ? TipoEnvio.EXPRESS
         : TipoEnvio.NORMAL;
 
+    envio.setTipoEnvio(tipo);
+
     int volumen = Optional.ofNullable(envio.getVolumen()).orElse(5);
 
     boolean fragil = envio.isFragil();
     boolean frio = envio.isFrio();
 
-    // TODO: replace with real value later
-    int saturacion = 0; // baja
+    int saturacion = envio.getSaturacion();
+    int ventanaHoras = envio.getVentanaHoras();
 
     Prioridad prioridad = prioridadService.predecirPrioridad(
         distancia,
         tipo,
-        24, // TODO: ventana horas
+        ventanaHoras,
         volumen,
         fragil,
         frio,

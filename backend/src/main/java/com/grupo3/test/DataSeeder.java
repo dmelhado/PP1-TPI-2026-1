@@ -16,21 +16,6 @@ public class DataSeeder implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        // ⚠️ Avoid duplicating data on every restart
-        if (envioService.listarTodosEnvios().size() > 0) return;
-
-        /* crearEnvio(
-            "Juan Pérez", 
-            "+54 9 11 3279-5613",
-            "Buenos Aires, Argentina", 
-            "Cordoba Capital, Argentina",
-
-            TipoEnvio.NORMAL, // NORMAL
-            3,     // volumen
-            false, // fragil
-            false, // frio
-            "operador1"
-        ); */
 
         crearEnvio(
           "Falso 123", "Falso 456", "Operario X", 

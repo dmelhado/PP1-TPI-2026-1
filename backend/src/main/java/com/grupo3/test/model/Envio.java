@@ -8,32 +8,31 @@ import java.time.LocalDateTime;
 @Data
 public class Envio {
 
-    // Metadatos
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;  // Automatico
-    private String trackingId; // Automatico
-    private String origen;
-    private String destino;
-    private String creadoPor;
-    private LocalDateTime fechaCreacion; // Automatico
-    private LocalDateTime fechaEstimadaEntrega; // Automatico
-    private String destinatarioNombre;
-    private String destinatarioTelefono;
-    @Enumerated(EnumType.STRING)
-    private EstadoEnvio estadoEnvio;
-    private String notasAdicionales;
+  // Metadatos
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id; // Automatico. TODO: no se esta actualizando.
+  private String trackingId; // Automatico
+  private String origen;
+  private String destino;
+  private String creadoPor;
+  private LocalDateTime fechaCreacion; // Automatico
+  private String destinatarioNombre;
+  private String destinatarioTelefono;
+  @Enumerated(EnumType.STRING)
+  private EstadoEnvio estadoEnvio;
+  private String notasAdicionales;
 
-    // Features que necesita ML
-    private Integer distanciaEstimada;
-    @Enumerated(EnumType.STRING)
-    private TipoEnvio tipoEnvio;
-    private Integer ventanaHoras;
-    private Integer volumen;
-    private boolean frio;
-    private boolean fragil;
-    private Integer saturacion; 
+  // Features que necesita ML
+  private Integer distanciaEstimada;
+  @Enumerated(EnumType.STRING)
+  private TipoEnvio tipoEnvio;
+  private Integer ventanaHoras;
+  private Integer volumen;
+  private boolean frio;
+  private boolean fragil;
+  private Integer saturacion;
 
-    @Enumerated(EnumType.STRING)
-    private Prioridad prioridadEnvio; // Automatico
+  @Enumerated(EnumType.STRING)
+  private Prioridad prioridadEnvio; // Automatico
 }
