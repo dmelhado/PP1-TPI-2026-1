@@ -1,6 +1,11 @@
 import random
 import pandas as pd
 
+# Tabla de indices
+# Tipo envio: 0 = NORMAL, 1 = Express
+# Saturacion: 0 = Baja, 1 = Media, 2 = Alta
+# Prioridad: 0 = Baja, 1 = Media, 2 = Alta
+
 def generar_distancia():
     r = random.random()
 
@@ -14,13 +19,13 @@ def generar_distancia():
         # Largas (2000–4400 km)
         return int(random.triangular(2000, 4400, 3000))
 
-def generar_ventana(distancia, tipo):
+def generar_ventana(distancia, express):
     # tiempo base mínimo en horas
     # asumimos velocidad promedio de 70 km/h
     tiempo_base = distancia / 70
 
     # express = más exigente
-    if tipo == "express":
+    if express:
         tiempo_base *= 0.75
 
     # agregamos margen logístico
@@ -40,12 +45,12 @@ def generar_ventana(distancia, tipo):
 
 def generar_dato():
     distancia = generar_distancia()
-    tipo = random.choices(["normal", "express"], weights=[0.7, 0.3])[0]
-    ventana = generar_ventana(distancia, tipo)
+    express = random.choices([0, 1], weights=[0.7, 0.3])[0]
+    ventana = generar_ventana(distancia, express)
     volumen = int(random.triangular(1, 50, 10))
     fragil = random.choices([0, 1], weights=[0.7, 0.3])[0]
     frio = random.choices([0, 1], weights=[0.85, 0.15])[0]
-    saturacion = random.choices(["baja", "media", "alta"], weights=[0.5, 0.3, 0.2])[0]
+    saturacion = random.choices([0, 1, 2], weights=[0.5, 0.3, 0.2])[0]
 
     # Sistema de scoring (coherente con dominio)
     score = 0
@@ -55,7 +60,7 @@ def generar_dato():
     if distancia > 2000:
         score += 2
 
-    if tipo == "express":
+    if express:
         score += 3
 
     if ventana <= 4:
@@ -69,21 +74,21 @@ def generar_dato():
     if frio:
         score += 1
 
-    if saturacion == "media":
+    if saturacion == 1:
         score += 1
-    elif saturacion == "alta":
+    elif saturacion == 2:
         score += 3
 
     # Clasificación final
     if score >= 7:
-        prioridad = "alta"
+        prioridad = 2
     elif score >= 4:
-        prioridad = "media"
+        prioridad = 1
     else:
-        prioridad = "baja"
+        prioridad = 0
 
     return [
-        distancia, tipo, ventana, volumen,
+        distancia, express, ventana, volumen,
         fragil, frio, saturacion, prioridad
     ]
 

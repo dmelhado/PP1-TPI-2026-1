@@ -27,8 +27,6 @@ public class TrainModel {
         System.out.println("\n=== Raw Schema ===");
         System.out.println(df.schema());
 
-        // factorize categorical columns
-        df = df.factorize("tipo_envio", "saturacion", "prioridad");
 
         System.out.println("\n=== After Factorize ===");
         System.out.println(df.schema());
@@ -65,7 +63,7 @@ public class TrainModel {
 
         // GUARDAR EL MODELO EN DISCO
         try (ObjectOutputStream oos = new ObjectOutputStream(
-            new FileOutputStream("model.ser"))) {
+            new FileOutputStream("priorityModel.ser"))) {
         oos.writeObject(model);
 }
     }
