@@ -16,6 +16,7 @@ export default function OperarioDashboard({ user }) {
     cancelados: 0,
   });
 
+  const [metricas, setMetricas] = useState(null);
   const [shipments, setShipments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -76,6 +77,16 @@ export default function OperarioDashboard({ user }) {
 
         setStats({ total, pendientes, enTransito, entregados, cancelados });
 
+        // Si es supervisor, obtener métricas
+        if (user?.role === "supervisor") {
+          try {
+            const metricsResponse = await axios.get("http://localhost:8080/api/envios/metricas");
+            setMetricas(metricsResponse.data);
+          } catch (err) {
+            console.warn("Advertencia: No se pudieron cargar las métricas", err);
+          }
+        }
+
       } catch (err) {
         console.error("Error completo:", err);
         setError(err.message || "Error al cargar los envíos");
@@ -85,7 +96,7 @@ export default function OperarioDashboard({ user }) {
     };
 
     fetchEnvios();
-  }, []);
+  }, [user?.role]);
 
   // Loading Screen
   if (loading) {
@@ -125,35 +136,75 @@ export default function OperarioDashboard({ user }) {
       <div className="hero">
         <div>
           <h2>Bienvenido, {user?.username}</h2>
-          <p>Panel de operaciones - Gestiona tus envíos diarios</p>
+          <p>Panel de operaciones - {user?.role === "supervisor" ? "Gestión y análisis de envíos" : "Mis envíos"}</p>
         </div>
         <div className="date-box">
-          <span>Fecha</span>
+          <span>Fecha: </span>
           <strong>{new Date().toLocaleDateString("es-AR")}</strong>
         </div>
       </div>
 
-      {/* STATS */}
-      <div className="stats">
-        <div className="card">
-          <p>Total Envíos</p>
-          <h3>{stats.total}</h3>
+      {/* MÉTRICAS PARA SUPERVISORES */}
+      {user?.role === "supervisor" && metricas && (
+        <div className="metrics-section">
+          <h3>📊 Métricas de Operaciones</h3>
+          <div className="metrics-grid">
+            <div className="metric-card">
+              <div className="metric-label">Envíos Pendientes</div>
+              <div className="metric-value">{metricas.porcentajePendientes.toFixed(1)}%</div>
+              <div className="metric-count">({stats.pendientes} envíos)</div>
+            </div>
+            <div className="metric-card">
+              <div className="metric-label">En Tránsito</div>
+              <div className="metric-value">{metricas.porcentajeEnTransito.toFixed(1)}%</div>
+              <div className="metric-count">({stats.enTransito} envíos)</div>
+            </div>
+            <div className="metric-card">
+              <div className="metric-label">Entregados</div>
+              <div className="metric-value">{metricas.porcentajeEntregados.toFixed(1)}%</div>
+              <div className="metric-count">({stats.entregados} envíos)</div>
+            </div>
+            <div className="metric-card">
+              <div className="metric-label">Cancelados</div>
+              <div className="metric-value">{metricas.porcentajeCancelados.toFixed(1)}%</div>
+              <div className="metric-count">({stats.cancelados} envíos)</div>
+            </div>
+            <div className="metric-card distance-card">
+              <div className="metric-label">Distancia Total</div>
+              <div className="metric-value">{metricas.distanciaTotal}</div>
+              <div className="metric-unit">km</div>
+            </div>
+            <div className="metric-card volume-card">
+              <div className="metric-label">Volumen Total</div>
+              <div className="metric-value">{metricas.volumenTotal.toFixed(0)}</div>
+            </div>
+          </div>
         </div>
-        <div className="card">
-          <p>En Tránsito</p>
-          <h3>{stats.enTransito}</h3>
-        </div>
-        <div className="card">
-          <p>Entregados</p>
-          <h3>{stats.entregados}</h3>
-        </div>
-        <div className="card">
-          <p>Cancelados</p>
-          <h3>{stats.cancelados}</h3>
-        </div>
-      </div>
+      )}
 
-      {/* BUSQUEDA Y FILTROS */}
+      {/* STATS - SOLO SUPERVISORES */}
+      {user?.role === "supervisor" && (
+        <div className="stats">
+          <div className="card">
+            <p>Total Envíos</p>
+            <h3>{stats.total}</h3>
+          </div>
+          <div className="card">
+            <p>En Tránsito</p>
+            <h3>{stats.enTransito}</h3>
+          </div>
+          <div className="card">
+            <p>Entregados</p>
+            <h3>{stats.entregados}</h3>
+          </div>
+          <div className="card">
+            <p>Cancelados</p>
+            <h3>{stats.cancelados}</h3>
+          </div>
+        </div>
+      )}
+
+      {/* BUSQUEDA - PARA TODOS */}
       <div className="search-filter">
         <div className="search-box">
           <input
@@ -164,19 +215,22 @@ export default function OperarioDashboard({ user }) {
             className="search-input"
           />
         </div>
-        <div className="filter-box">
-          <select
-            value={selectedStatus}
-            onChange={(e) => setSelectedStatus(e.target.value)}
-            className="filter-select"
-          >
-            <option value="todas">Todos ({stats.total})</option>
-            <option value="pendiente">Pendiente ({stats.pendientes})</option>
-            <option value="entransito">En Tránsito ({stats.enTransito})</option>
-            <option value="entregado">Entregados ({stats.entregados})</option>
-            <option value="cancelado">Cancelados ({stats.cancelados})</option>
-          </select>
-        </div>
+        {/* FILTRO POR ESTADO - SOLO SUPERVISORES */}
+        {user?.role === "supervisor" && (
+          <div className="filter-box">
+            <select
+              value={selectedStatus}
+              onChange={(e) => setSelectedStatus(e.target.value)}
+              className="filter-select"
+            >
+              <option value="todas">Todos ({stats.total})</option>
+              <option value="pendiente">Pendiente ({stats.pendientes})</option>
+              <option value="entransito">En Tránsito ({stats.enTransito})</option>
+              <option value="entregado">Entregados ({stats.entregados})</option>
+              <option value="cancelado">Cancelados ({stats.cancelados})</option>
+            </select>
+          </div>
+        )}
       </div>
 
       <div className="table">

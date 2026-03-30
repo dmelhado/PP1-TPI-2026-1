@@ -119,7 +119,9 @@ public class EnvioService {
     if (estadoActual == null || nuevoEstado == null) {
       throw new IllegalArgumentException("Estado actual o nuevo estado invalido");
     }
-
+    if (estadoActual == nuevoEstado) {
+      throw new IllegalStateException("El envío ya se encuentra en estado " + nuevoEstado);
+    }
     if (estadoActual == nuevoEstado)
       return;
 
@@ -147,5 +149,43 @@ public class EnvioService {
 
     return historialEstadoRepo
         .findByEnvioIdOrderByFechaCambioDesc(envio.getId());
+  }
+
+  // Calcular métricas para supervisores
+  public MetricasDTO calcularMetricas() {
+    List<Envio> todosEnvios = envioRepo.findAll();
+    
+    if (todosEnvios.isEmpty()) {
+      return new MetricasDTO(0, 0, 0, 0, 0, 0, 0);
+    }
+
+    int total = todosEnvios.size();
+    long pendientes = todosEnvios.stream().filter(e -> e.getEstadoEnvio() == EstadoEnvio.PENDIENTE).count();
+    long enViaje = todosEnvios.stream().filter(e -> e.getEstadoEnvio() == EstadoEnvio.EN_VIAJE).count();
+    long entregados = todosEnvios.stream().filter(e -> e.getEstadoEnvio() == EstadoEnvio.ENTREGADO).count();
+    long cancelados = todosEnvios.stream().filter(e -> e.getEstadoEnvio() == EstadoEnvio.CANCELADO).count();
+
+    double porcentajePendientes = (pendientes * 100.0) / total;
+    double porcentajeEnTransito = (enViaje * 100.0) / total;
+    double porcentajeEntregados = (entregados * 100.0) / total;
+    double porcentajeCancelados = (cancelados * 100.0) / total;
+
+    int distanciaTotal = todosEnvios.stream()
+        .mapToInt(e -> Optional.ofNullable(e.getDistanciaEstimada()).orElse(0))
+        .sum();
+
+    double volumenTotal = todosEnvios.stream()
+        .mapToDouble(e -> Optional.ofNullable(e.getVolumen()).orElse(0))
+        .sum();
+
+    return new MetricasDTO(
+        total,
+        porcentajePendientes,
+        porcentajeEnTransito,
+        porcentajeEntregados,
+        porcentajeCancelados,
+        distanciaTotal,
+        volumenTotal
+    );
   }
 }

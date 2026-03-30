@@ -143,8 +143,7 @@ export default function EnvioDetail({ user }) {
                 <span className="icon">📦</span>
                 <div>
                   <label>Volumen Total</label>
-                  {/* Showing Litres as the primary unit */}
-                  <p>{shipment.volumen} L <small style={{ fontSize: '0.8em', color: '#666' }}>({shipment.volumen} dm³)</small></p>
+                  <p>{shipment.volumen}</p>
                 </div>
               </div>
               <div className="stat-box">
