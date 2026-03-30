@@ -111,3 +111,9 @@ td {
   color: red;
   cursor: pointer;
 }
+
+.topbar-logo {
+  height: 30px;
+  width: auto;
+  object-fit: contain;
+}

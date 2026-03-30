@@ -3,9 +3,10 @@ import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import "./operarioDashboard.css";
+import LogiTrackLogo from "./assets/LogiTrack_Logo_colored.png";
 
-export default function OperarioDashboard() {
-  const user = "user"; // Replace with real user later
+export default function OperarioDashboard({ user }) {
+  // user viene de App.jsx con el nombre ingresado en login
 
   const [stats, setStats] = useState({
     total: 0,
@@ -77,8 +78,8 @@ export default function OperarioDashboard() {
     return (
       <div className="dashboard">
         <div className="topbar">
-          <div className="brand">📦 <span>LogiTrack</span></div>
-          <div className="user-box">{user}<span>Operario</span></div>
+          <div className="brand"><img src={LogiTrackLogo} alt="LogiTrack" className="topbar-logo" /> <span>LogiTrack</span></div>
+          <div className="user-box">{user?.username}<span>Operario</span></div>
         </div>
         <div style={{ textAlign: "center", padding: "80px" }}>
           <p>Cargando envíos...</p>
@@ -92,8 +93,8 @@ export default function OperarioDashboard() {
     return (
       <div className="dashboard">
         <div className="topbar">
-          <div className="brand">📦 <span>LogiTrack</span></div>
-          <div className="user-box">{user}<span>Operario</span></div>
+          <div className="brand"><img src={LogiTrackLogo} alt="LogiTrack" className="topbar-logo" /> <span>LogiTrack</span></div>
+          <div className="user-box">{user?.username}<span>Operario</span></div>
         </div>
         <div style={{ textAlign: "center", padding: "80px", color: "red" }}>
           <p>{error}</p>
@@ -109,7 +110,7 @@ export default function OperarioDashboard() {
       {/* HERO */}
       <div className="hero">
         <div>
-          <h2>Bienvenido, {user}</h2>
+          <h2>Bienvenido, {user?.username}</h2>
           <p>Panel de operaciones - Gestiona tus envíos diarios</p>
         </div>
         <div className="date-box">

@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import "./navbar.css";
+import LogiTrackLogo from "./assets/LogiTrack_Logo_colored.png";
 
 export default function Navbar({ user, onLogout }) {
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ export default function Navbar({ user, onLogout }) {
     <nav className="top-nav">
       <div className="nav-left">
         <div className="nav-logo">
-          <span className="box-icon">📦</span>
+          <img src={LogiTrackLogo} alt="LogiTrack" className="logo-img" />
           <div className="logo-text">
             <strong>LogiTrack</strong>
             <span>Sistema de Gestión de Envíos</span>

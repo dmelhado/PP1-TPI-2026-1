@@ -21,6 +21,12 @@
   border-radius: 8px;
 }
 
+.header-logo-img {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+}
+
 .envio-form {
   background: white;
   padding: 30px;

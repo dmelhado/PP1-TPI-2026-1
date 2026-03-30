@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "./services/api";
 import "./nuevoEnvio.css";
+import LogiTrackLogo from "./assets/LogiTrack_Logo_colored.png";
 
 export default function NuevoEnvio({ user }) {
   const navigate = useNavigate();
@@ -68,7 +69,7 @@ export default function NuevoEnvio({ user }) {
   return (
     <div className="nuevo-envio-container">
       <header className="form-header">
-        <div className="header-icon">📦</div>
+        <div className="header-icon"><img src={LogiTrackLogo} alt="LogiTrack" className="header-logo-img" /></div>
         <div>
           <h1>Nuevo Envío</h1>
           <p>Completa el formulario para registrar un nuevo envío en el sistema</p>
