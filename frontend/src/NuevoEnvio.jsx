@@ -15,16 +15,40 @@ export default function NuevoEnvio({ user }) {
     dimensiones: "",
     tipoEnvio: "NORMAL",
     fechaEstimadaEntrega: "",
-    notasAdicionales: ""
+    notasAdicionales: "",
+    ventanaHoras: "24",
+    fragil: false,
+    frio: false,
+    distanciaEstimada: "",
+    saturacion: "MEDIA"
   });
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
+
+  // Calcular volumen automáticamente a partir de dimensiones
+  const calculateVolume = () => {
+    if (!formData.dimensiones) return 0;
+    const dims = formData.dimensiones.split("x");
+    if (dims.length !== 3) return 0;
+    const [largo, ancho, alto] = dims.map(d => parseFloat(d.trim()));
+    if (isNaN(largo) || isNaN(ancho) || isNaN(alto)) return 0;
+    return Math.round((largo * ancho * alto) / 1000); // Convertir cm³ a litros
+  };
+
+  const calculatedVolume = calculateVolume();
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    const { name, value, type, checked } = e.target;
+    if (name === "acceptedTerms") {
+      setAcceptedTerms(checked);
+    } else if (type === "checkbox") {
+      setFormData((prev) => ({ ...prev, [name]: checked }));
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
     setError("");
   };
 
@@ -46,10 +70,28 @@ export default function NuevoEnvio({ user }) {
       return;
     }
 
+    // Validación de términos y condiciones (Ley 25.326)
+    if (!acceptedTerms) {
+      setError("Debes aceptar los términos y condiciones asociados a la Ley 25.326 (protección de datos personales) para registrar el envío.");
+      setLoading(false);
+      return;
+    }
+
+    // Validación de ventana de entrega
+    const ventanaHoras = parseInt(formData.ventanaHoras);
+    if (ventanaHoras < 6 || ventanaHoras > 48) {
+      setError("La ventana de entrega debe ser entre 6 y 48 horas.");
+      setLoading(false);
+      return;
+    }
+
     try {
       const payload = {
         ...formData,
         peso: parseFloat(formData.peso),
+        volumen: calculatedVolume,
+        ventanaHoras: parseInt(formData.ventanaHoras),
+        distanciaEstimada: formData.distanciaEstimada ? parseInt(formData.distanciaEstimada) : null,
         creadoPor: user?.username || "operario-web"
       };
 
@@ -196,8 +238,108 @@ export default function NuevoEnvio({ user }) {
           </div>
         </section>
 
+        {/* Sección: Parámetros para ML */}
+        <section className="form-section">
+          <h3>🤖 Parámetros de Prioridad (Machine Learning)</h3>
+          <div className="form-row">
+            <div className="form-group">
+              <label>Ventana de entrega (horas) *</label>
+              <input 
+                name="ventanaHoras"
+                type="number" 
+                min="6"
+                max="48"
+                placeholder="Ej: 24" 
+                value={formData.ventanaHoras}
+                required 
+                disabled={loading}
+                onChange={handleChange}
+              />
+              <small>Tiempo máximo disponible para realizar la entrega</small>
+            </div>
+            <div className="form-group">
+              <label>Volumen calculado </label>
+              <input 
+                type="number" 
+                value={calculatedVolume}
+                disabled
+                placeholder="Se calcula automáticamente"
+              />
+              <small>Se calcula automáticamente a partir de las dimensiones (largo × ancho × alto) / 1000</small>
+            </div>
+          </div>
+          <div className="form-row">
+            <div className="form-group">
+              <label>Distancia estimada (km) *</label>
+              <input 
+                name="distanciaEstimada"
+                type="number" 
+                placeholder="Ej: 250" 
+                value={formData.distanciaEstimada}
+                required 
+                disabled={loading}
+                onChange={handleChange}
+              />
+              <small>Distancia aproximada entre origen y destino</small>
+            </div>
+            <div className="form-group">
+              <label>Nivel de saturación *</label>
+              <select name="saturacion" value={formData.saturacion} disabled={loading} onChange={handleChange}>
+                <option value="BAJA">Baja</option>
+                <option value="MEDIA">Media</option>
+                <option value="ALTA">Alta</option>
+              </select>
+              <small>Congestión esperada en la ruta</small>
+            </div>
+          </div>
+          <div className="form-row">
+            <div className="form-group checkbox-group">
+              <label>
+                <input 
+                  name="fragil"
+                  type="checkbox"
+                  checked={formData.fragil}
+                  disabled={loading}
+                  onChange={handleChange}
+                />
+                <span>Paquete frágil</span>
+              </label>
+            </div>
+            <div className="form-group checkbox-group">
+              <label>
+                <input 
+                  name="frio"
+                  type="checkbox"
+                  checked={formData.frio}
+                  disabled={loading}
+                  onChange={handleChange}
+                />
+                <span>Requiere refrigeración</span>
+              </label>
+            </div>
+          </div>
+        </section>
+
         <div className="info-alert">
           <strong>Información:</strong> Una vez creado el envío, se generará automáticamente un número de seguimiento único (tracking ID). El estado inicial será "PENDIENTE" y será creado por el usuario: <strong>{user?.username || "operario-web"}</strong>
+        </div>
+
+        {/* Términos y Condiciones */}
+        <div className="terms-section">
+          <label className="terms-checkbox">
+            <input
+              name="acceptedTerms"
+              type="checkbox"
+              checked={acceptedTerms}
+              onChange={handleChange}
+              disabled={loading}
+              required
+            />
+            <span>
+              Acepto los términos y condiciones asociados a la <strong>Ley 25.326</strong> (Protección de Datos Personales). 
+              Confirmo que los datos del destinatario han sido proporcionados con su consentimiento y serán utilizados únicamente para fines de entrega.
+            </span>
+          </label>
         </div>
 
         {error && <div className="error-alert">❌ {error}</div>}
