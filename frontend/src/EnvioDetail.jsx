@@ -17,6 +17,13 @@ export default function EnvioDetail({ user }) {
   const [updatingEstado, setUpdatingEstado] = useState(false);
   const [estadoMsg, setEstadoMsg] = useState("");
 
+  // Helper to calculate Estimated Delivery based on Creation + Window Hours
+  const calculateEstimatedDelivery = (creationDate, windowHours) => {
+    const date = new Date(creationDate);
+    date.setHours(date.getHours() + windowHours);
+    return date.toLocaleString();
+  };
+
   useEffect(() => {
     const fetchShipmentAndHistory = async () => {
       try {
@@ -88,8 +95,11 @@ export default function EnvioDetail({ user }) {
           <span className={`badge status-${shipment.estadoEnvio.toLowerCase()}`}>
             {shipment.estadoEnvio}
           </span>
-          <span className="badge priority-urgent">
+          <span className={`badge priority-${shipment.prioridadEnvio.toLowerCase()}`}>
             Prioridad: {shipment.prioridadEnvio}
+          </span>
+          <span className={`badge saturation-${shipment.saturacion.toLowerCase()}`}>
+            Saturación: {shipment.saturacion}
           </span>
         </div>
       </div>
@@ -106,6 +116,9 @@ export default function EnvioDetail({ user }) {
             <div className="route-step">
               <label>Destino</label>
               <p>{shipment.destino}</p>
+            </div>
+            <div className="distancia-info">
+              <small>Distancia estimada: {shipment.distanciaEstimada} km</small>
             </div>
           </section>
 
@@ -127,25 +140,41 @@ export default function EnvioDetail({ user }) {
             <h3>📦 Información del Paquete</h3>
             <div className="flex-row">
               <div className="stat-box">
-                <span className="icon">⚖️</span>
+                <span className="icon">📦</span>
                 <div>
-                  <label>Peso</label>
-                  <p>{shipment.peso} kg</p>
+                  <label>Volumen Total</label>
+                  {/* Showing Litres as the primary unit */}
+                  <p>{shipment.volumen} L <small style={{ fontSize: '0.8em', color: '#666' }}>({shipment.volumen} dm³)</small></p>
                 </div>
               </div>
               <div className="stat-box">
-                <span className="icon">📏</span>
+                <span className="icon">❄️</span>
                 <div>
-                  <label>Dimensiones</label>
-                  <p>{shipment.dimensiones}</p>
+                  <label>Cadena de Frío</label>
+                  <p>{shipment.frio ? "Requerido" : "No requiere"}</p>
+                </div>
+              </div>
+              <div className="stat-box">
+                <span className="icon">💎</span>
+                <div>
+                  <label>Frágil</label>
+                  <p>{shipment.fragil ? "Sí" : "No"}</p>
                 </div>
               </div>
             </div>
+
+            {/* If you wanted to show the equivalent in cubic meters for very large shipments */}
+            {shipment.volumen >= 1000 && (
+              <div className="volume-conversion">
+                <small>Equivalente a {(shipment.volumen / 1000).toFixed(2)} m³</small>
+              </div>
+            )}
+
             {shipment.notasAdicionales && (
               <div className="notes-box">
-                <span className="icon">⚠️</span>
+                <span className="icon">📝</span>
                 <div>
-                  <label>Notas importantes</label>
+                  <label>Notas adicionales</label>
                   <p>{shipment.notasAdicionales}</p>
                 </div>
               </div>
@@ -186,19 +215,21 @@ export default function EnvioDetail({ user }) {
 
         <div className="column-side">
           <section className="card info-section">
-            <h3>⏰ Fechas</h3>
+            <h3>⏰ Tiempos</h3>
             <div className="date-item">
               <label>Fecha de creación</label>
               <p>{new Date(shipment.fechaCreacion).toLocaleString()}</p>
             </div>
             <div className="date-item">
-              <label>Entrega estimada</label>
-              <p>{new Date(shipment.fechaEstimadaEntrega).toLocaleString()}</p>
+              <label>Entrega estimada (Límite)</label>
+              <p>
+                {calculateEstimatedDelivery(shipment.fechaCreacion, shipment.ventanaHoras)}
+              </p>
             </div>
           </section>
 
           <section className="card info-section">
-            <h3>Información Adicional</h3>
+            <h3>Información de Control</h3>
             <div className="date-item">
               <label>Creado por</label>
               <p>{shipment.creadoPor}</p>
@@ -210,13 +241,13 @@ export default function EnvioDetail({ user }) {
           </section>
 
           <section className="card info-section">
-            <h3>🕘 Historial de Estados</h3>
+            <h3>🕘 Historial</h3>
             {history.length === 0 ? (
               <p className="history-empty">Sin cambios registrados.</p>
             ) : (
               <ul className="history-list">
-                {history.map((item) => (
-                  <li key={item.id}>
+                {history.map((item, index) => (
+                  <li key={index}>
                     <strong>{item.estadoAnterior} → {item.estadoNuevo}</strong>
                     <span>{item.motivoCambio || "Sin motivo"}</span>
                     <small>

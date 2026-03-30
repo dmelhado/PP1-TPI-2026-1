@@ -21,12 +21,12 @@ public class DataSeeder implements CommandLineRunner {
           "Falso 123", "Falso 456", "Operario X", 
           "Nombre Comprador", "12341234", 
           "Sin notas", 420, 
-          0, 
+          TipoEnvio.NORMAL, 
           24, 
           20, 
           false, 
           false, 
-          1
+          Saturacion.ALTA
         );
 
         System.out.println("Envíos cargados correctamente");
@@ -42,12 +42,12 @@ public class DataSeeder implements CommandLineRunner {
         String notasAdicionales,
 
         Integer distancia,
-        Integer tipoEnvio,
+        TipoEnvio tipoEnvio,
         Integer ventanaHoras,
         Integer volumen,
         Boolean frio,
         Boolean fragil,
-        Integer saturacion
+        Saturacion saturacion
         ) {
 
         Envio envio = new Envio();
@@ -60,7 +60,7 @@ public class DataSeeder implements CommandLineRunner {
         envio.setNotasAdicionales(notasAdicionales);
 
         envio.setDistanciaEstimada(distancia);
-        envio.setTipoEnvio(TipoEnvio.fromCode(tipoEnvio));
+        envio.setTipoEnvio(tipoEnvio);
         envio.setVentanaHoras(ventanaHoras);
         envio.setVolumen(volumen);
         envio.setFrio(frio);

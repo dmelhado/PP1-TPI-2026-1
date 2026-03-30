@@ -11,7 +11,7 @@ public class Envio {
   // Metadatos
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id; // Automatico. TODO: no se esta actualizando.
+  private Long id; // Automatico.
   private String trackingId; // Automatico
   private String origen;
   private String destino;
@@ -31,7 +31,7 @@ public class Envio {
   private Integer volumen;
   private boolean frio;
   private boolean fragil;
-  private Integer saturacion;
+  private Saturacion saturacion;
 
   @Enumerated(EnumType.STRING)
   private Prioridad prioridadEnvio; // Automatico

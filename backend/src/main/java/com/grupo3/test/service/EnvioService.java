@@ -6,11 +6,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.grupo3.test.model.Envio;
-import com.grupo3.test.model.EstadoEnvio;
-import com.grupo3.test.model.HistorialEstado;
-import com.grupo3.test.model.Prioridad;
-import com.grupo3.test.model.TipoEnvio;
+import com.grupo3.test.model.*;
 import com.grupo3.test.repository.EnvioRepository;
 import com.grupo3.test.repository.HistorialEstadoRepository;
 
@@ -46,7 +42,7 @@ public class EnvioService {
     boolean fragil = envio.isFragil();
     boolean frio = envio.isFrio();
 
-    int saturacion = envio.getSaturacion();
+    Saturacion saturacion = envio.getSaturacion();
     int ventanaHoras = envio.getVentanaHoras();
 
     Prioridad prioridad = prioridadService.predecirPrioridad(
@@ -56,7 +52,7 @@ public class EnvioService {
         volumen,
         fragil,
         frio,
-        saturacion);
+        saturacion.getCode());
 
     envio.setTrackingId(generarTrackingId());
     envio.setEstadoEnvio(EstadoEnvio.PENDIENTE);
