@@ -43,7 +43,7 @@ public class EnvioService {
     boolean frio = envio.isFrio();
 
     Saturacion saturacion = envio.getSaturacion();
-    int ventanaHoras = envio.getVentanaHoras();
+    int ventanaHoras = Optional.ofNullable(envio.getVentanaHoras()).orElse(24);
 
     Prioridad prioridad = prioridadService.predecirPrioridad(
         distancia,

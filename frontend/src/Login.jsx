@@ -62,7 +62,7 @@ export default function Login({ onLogin }) {
         </form>
 
         <div className="footer">
-          Prototipo navegable - LogiTrack ERP © 2026
+          Aranda-Melhado-Suarez - LogiTrack ERP © 2026
         </div>
       </div>
     </div>
