@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface EnvioRepository extends JpaRepository<Envio, Long> {
-    
-    Optional<Envio> findByTrackingId(String trackingId);
-    
-    List<Envio> findByEstadoEnvio(EstadoEnvio estadoEnvio);
- 
+
+  Optional<Envio> findByTrackingId(String trackingId);
+
+  List<Envio> findByEstadoEnvio(EstadoEnvio estadoEnvio);
+
 }

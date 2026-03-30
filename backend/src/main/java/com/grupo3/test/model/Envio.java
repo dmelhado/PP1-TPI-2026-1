@@ -7,34 +7,32 @@ import java.time.LocalDateTime;
 @Entity
 @Data
 public class Envio {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
-    private String trackingId;
-    private String origen;
-    private String destino;
-    private String creadoPor;
-    private LocalDateTime fechaCreacion;
-    private LocalDateTime fechaEstimadaEntrega;
-    private Integer distanciaEstimada;
+  // Metadatos
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id; // Automatico.
+  private String trackingId; // Automatico
+  private String origen;
+  private String destino;
+  private String creadoPor;
+  private LocalDateTime fechaCreacion; // Automatico
+  private String destinatarioNombre;
+  private String destinatarioTelefono;
+  @Enumerated(EnumType.STRING)
+  private EstadoEnvio estadoEnvio;
+  private String notasAdicionales;
 
-    @Enumerated(EnumType.STRING)
-    private EstadoEnvio estadoEnvio;
+  // Features que necesita ML
+  private Integer distanciaEstimada;
+  @Enumerated(EnumType.STRING)
+  private TipoEnvio tipoEnvio;
+  private Integer ventanaHoras;
+  private Integer volumen;
+  private boolean frio;
+  private boolean fragil;
+  private Saturacion saturacion;
 
-    @Enumerated(EnumType.STRING)
-    private TipoEnvio tipoEnvio;
-
-    @Enumerated(EnumType.STRING)
-    private Prioridad prioridadEnvio;
-
-    // Info destinatario y Paquete en esta clase, pensado para implementación simulada y alcance reducido
-
-    private String destinatarioNombre;
-    private String destinatarioTelefono;
-
-    private Double peso;
-    private String dimensiones;
-    private String restricciones;
-    private String notasAdicionales;
+  @Enumerated(EnumType.STRING)
+  private Prioridad prioridadEnvio; // Automatico
 }

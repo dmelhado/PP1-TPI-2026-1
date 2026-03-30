@@ -3,12 +3,14 @@ import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import "./operarioDashboard.css";
+import LogiTrackLogo from "./assets/LogiTrack_Logo_colored.png";
 
-export default function OperarioDashboard() {
-  const user = "user"; // Replace with real user later
+export default function OperarioDashboard({ user }) {
+  // user viene de App.jsx con el nombre ingresado en login
 
   const [stats, setStats] = useState({
     total: 0,
+    pendientes: 0,
     enTransito: 0,
     entregados: 0,
     cancelados: 0,
@@ -17,6 +19,15 @@ export default function OperarioDashboard() {
   const [shipments, setShipments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [searchTrackingId, setSearchTrackingId] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState("todas");
+
+  // Filtrar envíos según búsqueda y estado
+  const filteredShipments = shipments.filter((s) => {
+    const matchesSearch = s.id.toLowerCase().includes(searchTrackingId.toLowerCase());
+    const matchesStatus = selectedStatus === "todas" || s.status.toLowerCase().replace(/[^a-z]/g, "") === selectedStatus.toLowerCase();
+    return matchesSearch && matchesStatus;
+  });
 
   useEffect(() => {
     const fetchEnvios = async () => {
@@ -47,6 +58,10 @@ export default function OperarioDashboard() {
 
         // Calculate stats
         const total = data.length;
+        const pendientes = data.filter((e) =>
+          ["PENDIENTE", "Pendiente"].includes(e.estadoEnvio)
+        ).length;
+
         const enTransito = data.filter((e) =>
           ["EN_VIAJE", "EN_TRANSITO", "En Tránsito", "TRANSITO"].includes(e.estadoEnvio)
         ).length;
@@ -59,7 +74,7 @@ export default function OperarioDashboard() {
           ["CANCELADO", "Cancelado"].includes(e.estadoEnvio)
         ).length;
 
-        setStats({ total, enTransito, entregados, cancelados });
+        setStats({ total, pendientes, enTransito, entregados, cancelados });
 
       } catch (err) {
         console.error("Error completo:", err);
@@ -77,8 +92,8 @@ export default function OperarioDashboard() {
     return (
       <div className="dashboard">
         <div className="topbar">
-          <div className="brand">📦 <span>LogiTrack</span></div>
-          <div className="user-box">{user}<span>Operario</span></div>
+          <div className="brand"><img src={LogiTrackLogo} alt="LogiTrack" className="topbar-logo" /> <span>LogiTrack</span></div>
+          <div className="user-box">{user?.username}<span>Operario</span></div>
         </div>
         <div style={{ textAlign: "center", padding: "80px" }}>
           <p>Cargando envíos...</p>
@@ -92,8 +107,8 @@ export default function OperarioDashboard() {
     return (
       <div className="dashboard">
         <div className="topbar">
-          <div className="brand">📦 <span>LogiTrack</span></div>
-          <div className="user-box">{user}<span>Operario</span></div>
+          <div className="brand"><img src={LogiTrackLogo} alt="LogiTrack" className="topbar-logo" /> <span>LogiTrack</span></div>
+          <div className="user-box">{user?.username}<span>Operario</span></div>
         </div>
         <div style={{ textAlign: "center", padding: "80px", color: "red" }}>
           <p>{error}</p>
@@ -109,7 +124,7 @@ export default function OperarioDashboard() {
       {/* HERO */}
       <div className="hero">
         <div>
-          <h2>Bienvenido, {user}</h2>
+          <h2>Bienvenido, {user?.username}</h2>
           <p>Panel de operaciones - Gestiona tus envíos diarios</p>
         </div>
         <div className="date-box">
@@ -138,26 +153,51 @@ export default function OperarioDashboard() {
         </div>
       </div>
 
-      {/* TABLE */}
+      {/* BUSQUEDA Y FILTROS */}
+      <div className="search-filter">
+        <div className="search-box">
+          <input
+            type="text"
+            placeholder="🔍 Buscar por Tracking ID..."
+            value={searchTrackingId}
+            onChange={(e) => setSearchTrackingId(e.target.value)}
+            className="search-input"
+          />
+        </div>
+        <div className="filter-box">
+          <select
+            value={selectedStatus}
+            onChange={(e) => setSelectedStatus(e.target.value)}
+            className="filter-select"
+          >
+            <option value="todas">Todos ({stats.total})</option>
+            <option value="pendiente">Pendiente ({stats.pendientes})</option>
+            <option value="entransito">En Tránsito ({stats.enTransito})</option>
+            <option value="entregado">Entregados ({stats.entregados})</option>
+            <option value="cancelado">Cancelados ({stats.cancelados})</option>
+          </select>
+        </div>
+      </div>
+
       <div className="table">
         <div className="table-header">
-          <h3>Envíos Recientes</h3>
+          <h3>Envíos ({filteredShipments.length})</h3>
           <button>Ver todos →</button>
         </div>
 
-        <table>
-          <thead>
-            <tr>
-              <th>N° Seguimiento</th>
-              <th>Destinatario</th>
-              <th>Origen → Destino</th>
-              <th>Estado</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {shipments.length > 0 ? (
-              shipments.map((s) => (
+        {filteredShipments.length > 0 ? (
+          <table>
+            <thead>
+              <tr>
+                <th>N° Seguimiento</th>
+                <th>Destinatario</th>
+                <th>Origen → Destino</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredShipments.map((s) => (
                 <tr key={s.id}>
                   <td>{s.id}</td>
                   <td>{s.name}</td>
@@ -174,16 +214,15 @@ export default function OperarioDashboard() {
                     </Link>
                   </td>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="5" style={{ textAlign: "center", padding: "30px" }}>
-                  No hay envíos disponibles
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <div className="empty-state">
+            <h3>📦 No hay envíos disponibles</h3>
+            <p>{searchTrackingId ? "No se encontraron envíos que coincidan con tu búsqueda" : "Comienza registrando un nuevo envío"}</p>
+          </div>
+        )}
       </div>
     </div>
   );

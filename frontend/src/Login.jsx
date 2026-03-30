@@ -1,6 +1,7 @@
 // TEMPORAL HASTA TENER LOGIN EN BACKEND
 import { useState } from "react";
 import "./login.css";
+import LogiTrackLogo from "./assets/LogiTrack_Logo_colored.png";
 
 export default function Login({ onLogin }) {
   const [username, setUsername] = useState("");
@@ -19,7 +20,7 @@ export default function Login({ onLogin }) {
   return (
     <div className="login-container">
       <div className="login-card">
-        <div className="logo">📦</div>
+        <div className="logo"><img src={LogiTrackLogo} alt="LogiTrack" className="login-logo-img" /></div>
 
         <h1>
           <span className="red">Logi</span>
@@ -61,7 +62,7 @@ export default function Login({ onLogin }) {
         </form>
 
         <div className="footer">
-          Prototipo navegable - LogiTrack ERP © 2026
+          Aranda-Melhado-Suarez - LogiTrack ERP © 2026
         </div>
       </div>
     </div>
@@ -104,7 +105,7 @@ export default function Login() {
   return (
     <div className="container">
       <div className="card">
-        <div className="logo">📦</div>
+        <div className="logo"><img src={LogiTrackLogo} alt="LogiTrack" className="login-logo-img" /></div>
 
         <h1>
           <span className="red">Logi</span>Track
