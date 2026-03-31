@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "./services/api";
-import "./nuevoEnvio.css";
-import LogiTrackLogo from "./assets/LogiTrack_Logo_colored.png";
+import api from "../services/api";
+import "../styles/nuevoEnvio.css";
+import LogiTrackLogo from "../assets/LogiTrack_Logo_colored.png";
 
 export default function NuevoEnvio({ user }) {
   const navigate = useNavigate();

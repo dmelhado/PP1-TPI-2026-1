@@ -2,8 +2,8 @@ import { Link } from "react-router-dom";
 
 import { useState, useEffect } from "react";
 import axios from "axios";
-import "./operarioDashboard.css";
-import LogiTrackLogo from "./assets/LogiTrack_Logo_colored.png";
+import "../styles/operarioDashboard.css";
+import LogiTrackLogo from "../assets/LogiTrack_Logo_colored.png";
 
 export default function OperarioDashboard({ user }) {
   // user viene de App.jsx con el nombre ingresado en login

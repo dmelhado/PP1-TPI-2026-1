@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import api from "./services/api";
-import "./envioDetail.css";
+import api from "../services/api";
+import "../styles/envioDetail.css";
 
 const ESTADOS_DISPONIBLES = ["PENDIENTE", "EN_VIAJE", "ENTREGADO", "CANCELADO"];
 

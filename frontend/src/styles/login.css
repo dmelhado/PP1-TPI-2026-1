@@ -125,3 +125,10 @@ button {
   color: #777;
   text-align: center;
 }
+
+.login-error {
+  color: #cc0000;
+  font-size: 13px;
+  text-align: center;
+  margin-top: 8px;
+}
