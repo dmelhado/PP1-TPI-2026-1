@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import api from "./services/api";
-import "./envioDetail.css";
+import api from "../services/api";
+import "../styles/envioDetail.css";
 
 const ESTADOS_DISPONIBLES = ["PENDIENTE", "EN_VIAJE", "ENTREGADO", "CANCELADO"];
 
@@ -24,6 +24,11 @@ export default function EnvioDetail({ user }) {
     return date.toLocaleString();
   };
 
+  const formatearEstado = (estado) => {
+    if (!estado) return "";
+    return estado.replace(/_/g, " ").toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
+  };
+
   useEffect(() => {
     const fetchShipmentAndHistory = async () => {
       try {
@@ -32,7 +37,10 @@ export default function EnvioDetail({ user }) {
 
         const [shipmentResponse, historyResponse] = await Promise.all([
           api.get(`/envios/${id}`),
-          api.get(`/envios/${id}/historial`).catch(() => ({ data: [] })),
+          // Only fetch history if user is supervisor
+          user?.role === "supervisor"
+            ? api.get(`/envios/${id}/historial`).catch(() => ({ data: [] }))
+            : Promise.resolve({ data: [] }),
         ]);
 
         setShipment(shipmentResponse.data);
@@ -143,8 +151,7 @@ export default function EnvioDetail({ user }) {
                 <span className="icon">📦</span>
                 <div>
                   <label>Volumen Total</label>
-                  {/* Showing Litres as the primary unit */}
-                  <p>{shipment.volumen} L <small style={{ fontSize: '0.8em', color: '#666' }}>({shipment.volumen} dm³)</small></p>
+                  <p>{shipment.volumen}</p>
                 </div>
               </div>
               <div className="stat-box">
@@ -192,7 +199,7 @@ export default function EnvioDetail({ user }) {
               >
                 {ESTADOS_DISPONIBLES.map((estado) => (
                   <option key={estado} value={estado}>
-                    {estado}
+                    {formatearEstado(estado)}
                   </option>
                 ))}
               </select>
@@ -240,24 +247,29 @@ export default function EnvioDetail({ user }) {
             </div>
           </section>
 
-          <section className="card info-section">
-            <h3>🕘 Historial</h3>
-            {history.length === 0 ? (
-              <p className="history-empty">Sin cambios registrados.</p>
-            ) : (
-              <ul className="history-list">
-                {history.map((item, index) => (
-                  <li key={index}>
-                    <strong>{item.estadoAnterior} → {item.estadoNuevo}</strong>
-                    <span>{item.motivoCambio || "Sin motivo"}</span>
-                    <small>
-                      {item.cambiadoPor || "sistema"} - {new Date(item.fechaCambio).toLocaleString()}
-                    </small>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </section>
+          {/* Only show the history section if the user role is supervisor */}
+          {user?.role === "supervisor" && (
+            <section className="card info-section">
+              <h3>🕘 Historial</h3>
+              {history.length === 0 ? (
+                <p className="history-empty">Sin cambios registrados.</p>
+              ) : (
+                <ul className="history-list">
+                  {history.map((item, index) => (
+                    <li key={index}>
+                      <strong>
+                        {formatearEstado(item.estadoAnterior)} → {formatearEstado(item.estadoNuevo)}
+                      </strong>
+                      <span>{item.motivoCambio || "Sin motivo"}</span>
+                      <small>
+                        {item.cambiadoPor || "sistema"} - {new Date(item.fechaCambio).toLocaleString()}
+                      </small>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </section>
+          )}
         </div>
       </div>
     </div>

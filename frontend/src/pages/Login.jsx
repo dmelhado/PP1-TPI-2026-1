@@ -1,16 +1,22 @@
 // TEMPORAL HASTA TENER LOGIN EN BACKEND
 import { useState } from "react";
-import "./login.css";
-import LogiTrackLogo from "./assets/LogiTrack_Logo_colored.png";
+import "../styles/login.css";
+import LogiTrackLogo from "../assets/LogiTrack_Logo_colored.png";
 
 export default function Login({ onLogin }) {
   const [username, setUsername] = useState("");
-  const [role, setRole] = useState("operario");
+  const [role, setRole] = useState("Operario");
+  const [error, setError] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    if (!username.trim()) {
+      setError("Por favor, ingresa una credencial válida.");
+      return;
+    }
     // fake login → send data to App.jsx
+    setError("");
     onLogin({
       username,
       role,
@@ -59,6 +65,9 @@ export default function Login({ onLogin }) {
           </div>
 
           <button type="submit">Iniciar Sesión</button>
+
+          {error && <p className="login-error">{error}</p>}
+
         </form>
 
         <div className="footer">

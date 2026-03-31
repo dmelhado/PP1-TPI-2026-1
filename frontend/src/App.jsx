@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
-import Login from "./Login";
-import OperarioDashboard from "./OperarioDashboard";
-import EnvioDetail from "./EnvioDetail"; // Make sure this is imported!
-import NuevoEnvio from "./NuevoEnvio";
-import Navbar from "./Navbar";
+import Login from "./pages/Login.jsx";
+import OperarioDashboard from "./pages/OperarioDashboard.jsx";
+import EnvioDetail from "./pages/EnvioDetail.jsx"; // Make sure this is imported!
+import NuevoEnvio from "./pages/NuevoEnvio.jsx";
+import Navbar from "./components/Navbar.jsx";
 
 function App() {
   const [user, setUser] = useState(null);

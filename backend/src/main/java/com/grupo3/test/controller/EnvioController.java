@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.grupo3.test.model.Envio;
 import com.grupo3.test.model.EstadoEnvio;
 import com.grupo3.test.model.HistorialEstado;
+import com.grupo3.test.model.MetricasDTO;
 import com.grupo3.test.service.EnvioService;
 
 @RestController
@@ -77,6 +78,12 @@ public class EnvioController {
   @GetMapping("/estado/{estado}")
   public List<Envio> porEstado(@PathVariable EstadoEnvio estado) {
     return envioService.buscarEnvioPorEstado(estado);
+  }
+
+  @GetMapping("/metricas")
+  public ResponseEntity<MetricasDTO> obtenerMetricas() {
+    MetricasDTO metricas = envioService.calcularMetricas();
+    return ResponseEntity.ok(metricas);
   }
 
 }
