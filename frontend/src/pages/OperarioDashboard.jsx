@@ -52,7 +52,7 @@ export default function OperarioDashboard({ user }) {
           id: envio.trackingId || `LT-${envio.id}`,
           name: envio.destinatarioNombre || "Sin nombre",
           route: `${envio.origen} → ${envio.destino}`,
-          status: envio.estadoEnvio || "PENDIENTE",
+          status: (envio.estadoEnvio || "PENDIENTE").replace(/_/g, " "),
         }));
 
         setShipments(transformedShipments);
@@ -64,7 +64,7 @@ export default function OperarioDashboard({ user }) {
         ).length;
 
         const enTransito = data.filter((e) =>
-          ["EN_VIAJE", "EN_TRANSITO", "En Tránsito", "TRANSITO"].includes(e.estadoEnvio)
+          ["EN VIAJE", "EN_VIAJE"].includes(e.estadoEnvio)
         ).length;
 
         const entregados = data.filter((e) =>
@@ -136,7 +136,7 @@ export default function OperarioDashboard({ user }) {
       <div className="hero">
         <div>
           <h2>Bienvenido, {user?.username}</h2>
-          <p>Panel de operaciones - {user?.role === "supervisor" ? "Gestión y análisis de envíos" : "Mis envíos"}</p>
+          <p>Panel de Operaciones - {user?.role === "supervisor" ? "Gestión y Análisis de envíos" : "Gestión de Envios"}</p>
         </div>
         <div className="date-box">
           <span>Fecha: </span>
@@ -169,37 +169,6 @@ export default function OperarioDashboard({ user }) {
               <div className="metric-value">{metricas.porcentajeCancelados.toFixed(1)}%</div>
               <div className="metric-count">({stats.cancelados} envíos)</div>
             </div>
-            <div className="metric-card distance-card">
-              <div className="metric-label">Distancia Total</div>
-              <div className="metric-value">{metricas.distanciaTotal}</div>
-              <div className="metric-unit">km</div>
-            </div>
-            <div className="metric-card volume-card">
-              <div className="metric-label">Volumen Total</div>
-              <div className="metric-value">{metricas.volumenTotal.toFixed(0)}</div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* STATS - SOLO SUPERVISORES */}
-      {user?.role === "supervisor" && (
-        <div className="stats">
-          <div className="card">
-            <p>Total Envíos</p>
-            <h3>{stats.total}</h3>
-          </div>
-          <div className="card">
-            <p>En Tránsito</p>
-            <h3>{stats.enTransito}</h3>
-          </div>
-          <div className="card">
-            <p>Entregados</p>
-            <h3>{stats.entregados}</h3>
-          </div>
-          <div className="card">
-            <p>Cancelados</p>
-            <h3>{stats.cancelados}</h3>
           </div>
         </div>
       )}
@@ -225,7 +194,7 @@ export default function OperarioDashboard({ user }) {
             >
               <option value="todas">Todos ({stats.total})</option>
               <option value="pendiente">Pendiente ({stats.pendientes})</option>
-              <option value="entransito">En Tránsito ({stats.enTransito})</option>
+              <option value="enviaje">En Viaje ({stats.enTransito})</option>
               <option value="entregado">Entregados ({stats.entregados})</option>
               <option value="cancelado">Cancelados ({stats.cancelados})</option>
             </select>

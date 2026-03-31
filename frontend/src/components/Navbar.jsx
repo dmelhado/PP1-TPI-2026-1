@@ -35,9 +35,7 @@ export default function Navbar({ user, onLogout }) {
             <span>{user?.role || "Operario"}</span>
           </div>
         </div>
-        <button className="logout-btn" onClick={handleLogout}>
-          <span className="icon">↪️</span> Salir
-        </button>
+        <button className="logout-btn" onClick={handleLogout}>Salir</button>
       </div>
     </nav>
   );

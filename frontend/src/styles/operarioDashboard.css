@@ -38,24 +38,26 @@
 }
 
 .date-box {
-  background: rgba(255,255,255,0.2);
-  padding: 10px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  padding: 12px 20px;
   border-radius: 10px;
-  text-align: right;
-}
-
-/* STATS */
-.stats {
+  text-align: center;
   display: flex;
-  gap: 15px;
-  margin: 20px;
+  flex-direction: column;
+  gap: 4px;
 }
 
-.card {
-  background: white;
-  padding: 20px;
-  border-radius: 15px;
-  flex: 1;
+.date-box span {
+  font-size: 0.75rem;
+  opacity: 0.85;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.date-box strong {
+  font-size: 1.2rem;
+  font-weight: bold;
 }
 
 /* TABLE */
@@ -228,67 +230,74 @@ td {
 /* MÉTRICAS PARA SUPERVISORES */
 .metrics-section {
   margin: 20px;
-  padding: 20px;
+  padding: 25px;
   background: white;
   border-radius: 15px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  border: 1px solid #eee; 
 }
 
 .metrics-section h3 {
   color: #333;
   margin-bottom: 20px;
-  font-size: 1.3em;
+  font-size: 1.1rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-left: 4px solid #d90000; 
+  padding-left: 15px;
 }
 
 .metrics-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 15px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
 }
 
 .metric-card {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: #d6d6d6;
+  color: #333;
   padding: 20px;
   border-radius: 12px;
   text-align: center;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  transition: transform 0.2s, box-shadow 0.2s;
+  border-bottom: 4px solid #d90000; 
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .metric-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-}
-
-.metric-card.distance-card {
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-}
-
-.metric-card.volume-card {
-  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 15px rgba(217, 0, 0, 0.1);
+  background: #ffc2c2; 
 }
 
 .metric-label {
-  font-size: 0.9em;
-  opacity: 0.9;
-  margin-bottom: 10px;
+  font-size: 0.75rem;
+  color: #000000;
+  font-weight: 600;
+  margin-bottom: 8px;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.8px;
 }
 
 .metric-value {
-  font-size: 2.2em;
-  font-weight: bold;
-  margin: 10px 0;
-}
-
-.metric-count {
-  font-size: 0.85em;
-  opacity: 0.85;
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #222;
+  margin: 5px 0;
 }
 
 .metric-unit {
-  font-size: 0.9em;
-  opacity: 0.85;
+  font-size: 0.9rem;
+  color: #d90000; 
+  font-weight: bold;
+  margin-left: 4px;
+}
+
+.metric-count {
+  font-size: 0.8rem;
+  color: #999;
+  margin-top: 5px;
 }

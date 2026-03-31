@@ -48,16 +48,16 @@ export default function Login({ onLogin }) {
 
           <div className="roles">
             <div
-              className={`role ${role === "Operario" ? "active" : ""}`}
-              onClick={() => setRole("Operario")}
+              className={`role ${role === "operario" ? "active" : ""}`}
+              onClick={() => setRole("operario")}
             >
               👤
               <span>Operario</span>
             </div>
 
             <div
-              className={`role ${role === "Supervisor" ? "active" : ""}`}
-              onClick={() => setRole("Supervisor")}
+              className={`role ${role === "supervisor" ? "active" : ""}`}
+              onClick={() => setRole("supervisor")}
             >
               🛡️
               <span>Supervisor</span>
