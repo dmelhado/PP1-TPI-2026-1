@@ -44,6 +44,14 @@
 .back-link:hover { text-decoration: underline; }
 
 /* Status & Priority Badges */
+.header-badges {
+  display: flex;
+  align-items: center;
+  gap: 12px;  /* ← aumentá este valor para más separación */
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
 .badge {
   padding: 8px 16px;
   border-radius: 8px; /* Changed from pill to 8px to match inputs */
@@ -52,9 +60,66 @@
   text-transform: uppercase;
 }
 
-/* Using the Red/Green/Purple palette from snippet 1 logic */
-.status-transit { background: #fff1f0; color: #cf1322; border: 1px solid #ffa39e; }
-.priority-urgent { background: #fff3e0; color: #e65100; border: 1px solid #ffe0b2; }
+.status-pendiente { 
+  background: #fff3cd; 
+  color: #8b6f47; 
+  border: 1.5px solid #ffc107; 
+}
+
+.status-en_viaje  { 
+  background: #e6d8ff; 
+  color: #7b1fa2; 
+  border: 1.5px solid #9c27b0; 
+}
+
+.status-entregado { 
+  background: #d4f5df; 
+  color: #1b5e20; 
+  border: 1.5px solid #4caf50; 
+}
+
+.status-cancelado { 
+  background: #ffcdd2; 
+  color: #b71c1c; 
+  border: 1.5px solid #f44336; 
+}
+
+/* PRIORIDAD */
+.priority-alta  { 
+  background: #ffcdd2; 
+  color: #b71c1c; 
+  border: 1.5px solid #f44336; 
+}
+
+.priority-media { 
+  background: #fff3e0; 
+  color: #e65100; 
+  border: 1.5px solid #ff9800; 
+}
+
+.priority-baja  { 
+  background: #d4f5df; 
+  color: #1b5e20; 
+  border: 1.5px solid #4caf50; 
+}
+
+/* SATURACIÓN */
+.saturation-alta  { 
+  background: #ffcdd2; 
+  color: #b71c1c; 
+  border: 1.5px solid #f44336; 
+}
+
+.saturation-media { 
+  background: #fff3e0; 
+  color: #e65100; 
+  border: 1.5px solid #ff9800; 
+}
+.saturation-baja  { 
+  background: #d4f5df; 
+  color: #1b5e20; 
+  border: 1.5px solid #4caf50; 
+}
 
 /* Form Elements inside Details (Status Update) */
 .status-form {

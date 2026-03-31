@@ -24,6 +24,11 @@ export default function EnvioDetail({ user }) {
     return date.toLocaleString();
   };
 
+  const formatearEstado = (estado) => {
+    if (!estado) return "";
+    return estado.replace(/_/g, " ").toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
+  };
+
   useEffect(() => {
     const fetchShipmentAndHistory = async () => {
       try {
@@ -191,7 +196,7 @@ export default function EnvioDetail({ user }) {
               >
                 {ESTADOS_DISPONIBLES.map((estado) => (
                   <option key={estado} value={estado}>
-                    {estado}
+                    {formatearEstado(estado)}
                   </option>
                 ))}
               </select>
@@ -247,7 +252,7 @@ export default function EnvioDetail({ user }) {
               <ul className="history-list">
                 {history.map((item, index) => (
                   <li key={index}>
-                    <strong>{item.estadoAnterior} → {item.estadoNuevo}</strong>
+                    <strong>{formatearEstado(item.estadoAnterior)} → {formatearEstado(item.estadoNuevo)}</strong>
                     <span>{item.motivoCambio || "Sin motivo"}</span>
                     <small>
                       {item.cambiadoPor || "sistema"} - {new Date(item.fechaCambio).toLocaleString()}

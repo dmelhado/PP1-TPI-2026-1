@@ -5,13 +5,40 @@
 
 /* HERO */
 .hero {
-  background: #d90000;
+  background: linear-gradient(135deg, #d90000, #a00000);
   color: white;
   margin: 20px;
-  padding: 25px;
+  padding: 28px 35px;
   border-radius: 15px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 15px rgba(217, 0, 0, 0.3);
+}
+
+.hero-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.hero-icon {
+  font-size: 2.5rem;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 12px;
+  border-radius: 12px;
+}
+
+.hero h2 {
+  margin: 0 0 4px 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.hero p {
+  margin: 0;
+  opacity: 0.85;
+  font-size: 0.9rem;
 }
 
 .date-box {
