@@ -14,8 +14,8 @@ export default function OperarioDashboard({ user }) {
     enTransito: 0,
     entregados: 0,
     cancelados: 0,
-    altaPrioridad: 0,   
-    mediaPrioridad: 0, 
+    altaPrioridad: 0,
+    mediaPrioridad: 0,
     bajaPrioridad: 0,
   });
 
@@ -138,135 +138,137 @@ export default function OperarioDashboard({ user }) {
 
   return (
     <div className="dashboard">
+      <div className="dashboard-container">
 
-      {/* HERO */}
-      <div className="hero">
-        <div>
-          <h2>Bienvenido, {user?.username}</h2>
-          <p>Panel de Operaciones - {user?.role === "supervisor" ? "Gestión y Análisis de envíos" : "Gestión de Envios"}</p>
-        </div>
-        <div className="date-box">
-          <span>Fecha: </span>
-          <strong>{new Date().toLocaleDateString("es-AR")}</strong>
-        </div>
-      </div>
-
-      {/* MÉTRICAS PARA SUPERVISORES */}
-      {user?.role === "supervisor" && metricas && (
-        <div className="metrics-section">
-          <h3>📊 Métricas de Envíos ({stats.total} {stats.total === 1 ? "envío" : "envíos totales"})</h3>
-          <div className="metrics-grid">
-            <div className="metric-card">
-              <div className="metric-label">Envíos Pendientes</div>
-              <div className="metric-value">{stats.pendientes}</div>
-            </div>
-            <div className="metric-card">
-              <div className="metric-label">En Tránsito</div>
-              <div className="metric-value">{stats.enTransito}</div>
-            </div>
-            <div className="metric-card">
-              <div className="metric-label">Entregados</div>
-              <div className="metric-value">{stats.entregados}</div>
-            </div>
-            <div className="metric-card">
-              <div className="metric-label">Cancelados</div>
-              <div className="metric-value">{stats.cancelados}</div>
-            </div>
+        {/* HERO */}
+        <div className="hero">
+          <div>
+            <h2>Bienvenido, {user?.username}</h2>
+            <p>Panel de Operaciones - {user?.role === "supervisor" ? "Gestión y Análisis de envíos" : "Gestión de Envios"}</p>
           </div>
-          <div className="metrics-grid metrics-priority">
-            <div className="metric-card alta-card">
-              <div className="metric-label">Alta Prioridad</div>
-              <div className="metric-value">{stats.altaPrioridad}</div>
-            </div>
-            <div className="metric-card media-card">
-              <div className="metric-label">Media Prioridad</div>
-              <div className="metric-value">{stats.mediaPrioridad}</div>
-            </div>
-            <div className="metric-card baja-card">
-              <div className="metric-label">Baja Prioridad</div>
-              <div className="metric-value">{stats.bajaPrioridad}</div>
-            </div>
+          <div className="date-box">
+            <span>Fecha: </span>
+            <strong>{new Date().toLocaleDateString("es-AR")}</strong>
           </div>
         </div>
-      )}
 
-      {/* BUSQUEDA - PARA TODOS */}
-      <div className="search-filter">
-        <div className="search-box">
-          <input
-            type="text"
-            placeholder="🔍 Buscar por Tracking ID..."
-            value={searchTrackingId}
-            onChange={(e) => setSearchTrackingId(e.target.value)}
-            className="search-input"
-          />
-        </div>
-        {/* FILTRO POR ESTADO - SOLO SUPERVISORES */}
-        {user?.role === "supervisor" && (
-          <div className="filter-box">
-            <select
-              value={selectedStatus}
-              onChange={(e) => setSelectedStatus(e.target.value)}
-              className="filter-select"
-            >
-              <option value="todas">Todos ({stats.total})</option>
-              <option value="pendiente">Pendiente ({stats.pendientes})</option>
-              <option value="enviaje">En Viaje ({stats.enTransito})</option>
-              <option value="entregado">Entregados ({stats.entregados})</option>
-              <option value="cancelado">Cancelados ({stats.cancelados})</option>
-            </select>
+        {/* MÉTRICAS PARA SUPERVISORES */}
+        {user?.role === "supervisor" && metricas && (
+          <div className="metrics-section">
+            <h3>📊 Métricas de Envíos ({stats.total} {stats.total === 1 ? "envío" : "envíos totales"})</h3>
+            <div className="metrics-grid">
+              <div className="metric-card">
+                <div className="metric-label">Envíos Pendientes</div>
+                <div className="metric-value">{stats.pendientes}</div>
+              </div>
+              <div className="metric-card">
+                <div className="metric-label">En Tránsito</div>
+                <div className="metric-value">{stats.enTransito}</div>
+              </div>
+              <div className="metric-card">
+                <div className="metric-label">Entregados</div>
+                <div className="metric-value">{stats.entregados}</div>
+              </div>
+              <div className="metric-card">
+                <div className="metric-label">Cancelados</div>
+                <div className="metric-value">{stats.cancelados}</div>
+              </div>
+            </div>
+            <div className="metrics-grid metrics-priority">
+              <div className="metric-card alta-card">
+                <div className="metric-label">Alta Prioridad</div>
+                <div className="metric-value">{stats.altaPrioridad}</div>
+              </div>
+              <div className="metric-card media-card">
+                <div className="metric-label">Media Prioridad</div>
+                <div className="metric-value">{stats.mediaPrioridad}</div>
+              </div>
+              <div className="metric-card baja-card">
+                <div className="metric-label">Baja Prioridad</div>
+                <div className="metric-value">{stats.bajaPrioridad}</div>
+              </div>
+            </div>
           </div>
         )}
-      </div>
 
-      <div className="table">
-        <div className="table-header">
-          <h3>
-            📦 Listado de Envíos 
-            <span style={{ fontSize: '0.9rem', color: '#888', fontWeight: 'normal' }}>
-              ({filteredShipments.length} encontrados)
-            </span>
-          </h3>
-        <button>Ver todos →</button>
-      </div>
+        {/* BUSQUEDA - PARA TODOS */}
+        <div className="search-filter">
+          <div className="search-box">
+            <input
+              type="text"
+              placeholder="🔍 Buscar por Tracking ID..."
+              value={searchTrackingId}
+              onChange={(e) => setSearchTrackingId(e.target.value)}
+              className="search-input"
+            />
+          </div>
+          {/* FILTRO POR ESTADO - SOLO SUPERVISORES */}
+          {user?.role === "supervisor" && (
+            <div className="filter-box">
+              <select
+                value={selectedStatus}
+                onChange={(e) => setSelectedStatus(e.target.value)}
+                className="filter-select"
+              >
+                <option value="todas">Todos ({stats.total})</option>
+                <option value="pendiente">Pendiente ({stats.pendientes})</option>
+                <option value="enviaje">En Viaje ({stats.enTransito})</option>
+                <option value="entregado">Entregados ({stats.entregados})</option>
+                <option value="cancelado">Cancelados ({stats.cancelados})</option>
+              </select>
+            </div>
+          )}
+        </div>
 
-        {filteredShipments.length > 0 ? (
-          <table>
-            <thead>
-              <tr>
-                <th>N° Seguimiento</th>
-                <th>Destinatario</th>
-                <th>Origen → Destino</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredShipments.map((s) => (
-                <tr key={s.id}>
-                  <td>{s.id}</td>
-                  <td>{s.name}</td>
-                  <td>{s.route}</td>
-                  <td>
-                    <span className={`status ${s.status.toLowerCase().replace(/[^a-z]/g, "")}`}>
-                      {s.status}
-                    </span>
-                  </td>
-                  <td className="action">
+        <div className="table">
+          <div className="table-header">
+            <h3>
+              📦 Listado de Envíos
+              <span style={{ fontSize: '0.9rem', color: '#888', fontWeight: 'normal' }}>
+                ({filteredShipments.length} encontrados)
+              </span>
+            </h3>
+            <button>Ver todos →</button>
+          </div>
+
+          {filteredShipments.length > 0 ? (
+            <table>
+              <thead>
+                <tr>
+                  <th>N° Seguimiento</th>
+                  <th>Destinatario</th>
+                  <th>Origen → Destino</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredShipments.map((s) => (
+                  <tr key={s.id}>
+                    <td>{s.id}</td>
+                    <td>{s.name}</td>
+                    <td>{s.route}</td>
+                    <td>
+                      <span className={`status ${s.status.toLowerCase().replace(/[^a-z]/g, "")}`}>
+                        {s.status}
+                      </span>
+                    </td>
+                    <td className="action">
                       <Link to={`/shipment/${s.id}`} className="ver-detalle">
-                          Ver detalle →
+                        Ver detalle →
                       </Link>
                     </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        ) : (
-          <div className="empty-state">
-            <h3>📦 No hay envíos disponibles</h3>
-            <p>{searchTrackingId ? "No se encontraron envíos que coincidan con tu búsqueda" : "Comienza registrando un nuevo envío"}</p>
-          </div>
-        )}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <div className="empty-state">
+              <h3>📦 No hay envíos disponibles</h3>
+              <p>{searchTrackingId ? "No se encontraron envíos que coincidan con tu búsqueda" : "Comienza registrando un nuevo envío"}</p>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
