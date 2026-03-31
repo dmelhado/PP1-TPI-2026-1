@@ -116,41 +116,44 @@ export default function EnvioDetail({ user }) {
         <div className="column-main">
           <section className="card info-section">
             <h3>📍 Información de Ruta</h3>
-            <div className="route-step">
-              <label>Origen</label>
-              <p>{shipment.origen}</p>
-            </div>
-            <div className="route-line"></div>
-            <div className="route-step">
-              <label>Destino</label>
-              <p>{shipment.destino}</p>
+            <div className="route-container">
+              <div className="route-step origen">
+                <label>Origen</label>
+                <p>{shipment.origen}</p>
+              </div>
+              <div className="route-step destino">
+                <label>Destino</label>
+                <p>{shipment.destino}</p>
+              </div>
             </div>
             <div className="distancia-info">
-              <small>Distancia estimada: {shipment.distanciaEstimada} km</small>
+              <span className="distancia-text">
+                🛣️ <strong>{shipment.distanciaEstimada} km</strong> de trayecto total
+              </span>
             </div>
           </section>
 
           <section className="card info-section">
             <h3>👤 Información del Destinatario</h3>
-            <div className="flex-row">
-              <div className="input-box">
+            <div className="info-grid">
+              <div className="data-item">
                 <label>Nombre completo</label>
                 <p>{shipment.destinatarioNombre}</p>
               </div>
-              <div className="input-box">
+              <div className="data-item">
                 <label>Teléfono</label>
-                <p>{shipment.destinatarioTelefono}</p>
+                <p>📞 {shipment.destinatarioTelefono}</p>
               </div>
             </div>
           </section>
 
           <section className="card info-section">
             <h3>📦 Información del Paquete</h3>
-            <div className="flex-row">
+            <div className="package-grid">
               <div className="stat-box">
                 <span className="icon">📦</span>
                 <div>
-                  <label>Volumen Total</label>
+                  <label>Volumen</label>
                   <p>{shipment.volumen}</p>
                 </div>
               </div>
@@ -179,11 +182,7 @@ export default function EnvioDetail({ user }) {
 
             {shipment.notasAdicionales && (
               <div className="notes-box">
-                <span className="icon">📝</span>
-                <div>
-                  <label>Notas adicionales</label>
-                  <p>{shipment.notasAdicionales}</p>
-                </div>
+                <p><strong>📝 Notas:</strong> {shipment.notasAdicionales}</p>
               </div>
             )}
           </section>
@@ -216,34 +215,42 @@ export default function EnvioDetail({ user }) {
                 {updatingEstado ? "Actualizando..." : "Guardar estado"}
               </button>
             </form>
-            {estadoMsg && <p className="status-msg">{estadoMsg}</p>}
+            {estadoMsg && (
+      <p className={`status-msg ${estadoMsg.includes("correctamente") ? "success" : "error"}`}>
+        {estadoMsg}
+      </p>
+)}
           </section>
         </div>
 
         <div className="column-side">
           <section className="card info-section">
             <h3>⏰ Tiempos</h3>
-            <div className="date-item">
-              <label>Fecha de creación</label>
-              <p>{new Date(shipment.fechaCreacion).toLocaleString()}</p>
-            </div>
-            <div className="date-item">
-              <label>Entrega estimada (Límite)</label>
-              <p>
-                {calculateEstimatedDelivery(shipment.fechaCreacion, shipment.ventanaHoras)}
-              </p>
+            <div className="control-list">
+              <div className="control-item">
+                <label>Fecha de creación</label>
+                <p>{new Date(shipment.fechaCreacion).toLocaleString()}</p>
+              </div>
+              <div className="control-item">
+                <label>Entrega estimada (Límite)</label>
+                <p>
+                  {calculateEstimatedDelivery(shipment.fechaCreacion, shipment.ventanaHoras)}
+                </p>
+              </div>
             </div>
           </section>
 
           <section className="card info-section">
-            <h3>Información de Control</h3>
-            <div className="date-item">
-              <label>Creado por</label>
-              <p>{shipment.creadoPor}</p>
-            </div>
-            <div className="date-item">
-              <label>Tipo de Envío</label>
-              <p>{shipment.tipoEnvio}</p>
+            <h3>🛠️ Información de Control</h3>
+            <div className="control-list">
+              <div className="control-item">
+                <label>Operario</label>
+                <p>{shipment.creadoPor}</p>
+              </div>
+              <div className="date-item">
+                <label>Tipo de Envío</label>
+                <p>{shipment.tipoEnvio}</p>
+              </div>
             </div>
           </section>
 
