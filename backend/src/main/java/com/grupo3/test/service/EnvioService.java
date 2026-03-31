@@ -36,7 +36,6 @@ public class EnvioService {
     int distancia = Optional.ofNullable(envio.getDistanciaEstimada()).orElse(500);
     TipoEnvio tipo = envio.getTipoEnvio();
 
-
     int volumen = Optional.ofNullable(envio.getVolumen()).orElse(5);
 
     boolean fragil = envio.isFragil();
@@ -113,32 +112,25 @@ public class EnvioService {
     });
   }
 
-  private void validarTransicionEstado(EstadoEnvio estadoActual,
+  private void validarTransicionEstado(
+      EstadoEnvio estadoActual,
       EstadoEnvio nuevoEstado) {
-
     if (estadoActual == null || nuevoEstado == null) {
-      throw new IllegalArgumentException("Estado actual o nuevo estado invalido");
+      throw new IllegalArgumentException("Estado inválido");
     }
+
     if (estadoActual == nuevoEstado) {
-      throw new IllegalStateException("El envío ya se encuentra en estado " + nuevoEstado);
-    }
-    if (estadoActual == nuevoEstado)
-      return;
-
-    if ((estadoActual == EstadoEnvio.EN_VIAJE
-        || estadoActual == EstadoEnvio.ENTREGADO
-        || estadoActual == EstadoEnvio.CANCELADO)
-        && nuevoEstado == EstadoEnvio.PENDIENTE) {
-
       throw new IllegalStateException(
-          "No se puede volver a PENDIENTE desde " + estadoActual);
+          "El envío ya se encuentra en estado "
+              + nuevoEstado.toPrettyString());
     }
 
-    if (estadoActual == EstadoEnvio.CANCELADO ||
-        estadoActual == EstadoEnvio.ENTREGADO) {
-
+    if (!estadoActual.puedeCambiarA(nuevoEstado)) {
       throw new IllegalStateException(
-          "No se puede cambiar el estado de un envio " + estadoActual);
+          "No se puede pasar de "
+              + estadoActual.toPrettyString()
+              + " a "
+              + nuevoEstado.toPrettyString());
     }
   }
 
@@ -154,7 +146,7 @@ public class EnvioService {
   // Calcular métricas para supervisores
   public MetricasDTO calcularMetricas() {
     List<Envio> todosEnvios = envioRepo.findAll();
-    
+
     if (todosEnvios.isEmpty()) {
       return new MetricasDTO(0, 0, 0, 0, 0, 0, 0);
     }
@@ -185,7 +177,6 @@ public class EnvioService {
         porcentajeEntregados,
         porcentajeCancelados,
         distanciaTotal,
-        volumenTotal
-    );
+        volumenTotal);
   }
 }
