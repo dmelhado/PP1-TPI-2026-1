@@ -1,17 +1,9 @@
 package com.grupo3.test.service;
 
 import com.grupo3.test.model.Prioridad;
-import com.grupo3.test.model.TipoEnvio;
 import org.springframework.stereotype.Service;
 import smile.classification.RandomForest;
-import smile.data.DataFrame;
-import smile.data.formula.Formula;
-import smile.io.Read;
-import org.apache.commons.csv.CSVFormat;
 import java.io.*;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 @Service
 public class PrioridadService {

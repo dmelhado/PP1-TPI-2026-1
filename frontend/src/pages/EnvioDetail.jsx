@@ -37,7 +37,10 @@ export default function EnvioDetail({ user }) {
 
         const [shipmentResponse, historyResponse] = await Promise.all([
           api.get(`/envios/${id}`),
-          api.get(`/envios/${id}/historial`).catch(() => ({ data: [] })),
+          // Only fetch history if user is supervisor
+          user?.role === "supervisor"
+            ? api.get(`/envios/${id}/historial`).catch(() => ({ data: [] }))
+            : Promise.resolve({ data: [] }),
         ]);
 
         setShipment(shipmentResponse.data);
@@ -244,24 +247,29 @@ export default function EnvioDetail({ user }) {
             </div>
           </section>
 
-          <section className="card info-section">
-            <h3>🕘 Historial</h3>
-            {history.length === 0 ? (
-              <p className="history-empty">Sin cambios registrados.</p>
-            ) : (
-              <ul className="history-list">
-                {history.map((item, index) => (
-                  <li key={index}>
-                    <strong>{formatearEstado(item.estadoAnterior)} → {formatearEstado(item.estadoNuevo)}</strong>
-                    <span>{item.motivoCambio || "Sin motivo"}</span>
-                    <small>
-                      {item.cambiadoPor || "sistema"} - {new Date(item.fechaCambio).toLocaleString()}
-                    </small>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </section>
+          {/* Only show the history section if the user role is supervisor */}
+          {user?.role === "supervisor" && (
+            <section className="card info-section">
+              <h3>🕘 Historial</h3>
+              {history.length === 0 ? (
+                <p className="history-empty">Sin cambios registrados.</p>
+              ) : (
+                <ul className="history-list">
+                  {history.map((item, index) => (
+                    <li key={index}>
+                      <strong>
+                        {formatearEstado(item.estadoAnterior)} → {formatearEstado(item.estadoNuevo)}
+                      </strong>
+                      <span>{item.motivoCambio || "Sin motivo"}</span>
+                      <small>
+                        {item.cambiadoPor || "sistema"} - {new Date(item.fechaCambio).toLocaleString()}
+                      </small>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </section>
+          )}
         </div>
       </div>
     </div>
