@@ -3,29 +3,6 @@
   min-height: 100vh;
 }
 
-/* TOP BAR */
-.topbar {
-  background: #d90000;
-  color: white;
-  padding: 15px 25px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.brand span {
-  font-weight: bold;
-  margin-left: 8px;
-}
-
-.user-box {
-  background: rgba(255,255,255,0.2);
-  padding: 8px 12px;
-  border-radius: 10px;
-  display: flex;
-  gap: 10px;
-}
-
 /* HERO */
 .hero {
   background: #d90000;
@@ -71,8 +48,46 @@
 .table-header {
   display: flex;
   justify-content: space-between;
-  padding: 15px;
-  background: #f0dede;
+  align-items: center;   
+  padding: 10px 25px;     
+  background: #ffffff;    
+  border-bottom: 2px solid #f0f0f0; 
+}
+
+.table-header h3 {
+  font-size: 1.1rem;
+  color: #333;
+  margin: 0;
+  display: flex;
+  align-items: center; 
+  gap: 10px;
+  white-space: nowrap; 
+}
+
+
+.table-header h3 span {
+  font-size: 0.85rem;
+  color: #888;
+  font-weight: normal;
+}
+
+.table-header button {
+  background: #d90000;
+  color: white;
+  border: none;
+  padding: 8px 18px;     
+  border-radius: 20px;    
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;    
+  width: auto;            
+}
+
+.table-header button:hover {
+  background: #b30000;
+  transform: scale(1.02); 
 }
 
 table {
@@ -91,6 +106,21 @@ td {
   padding: 12px;
   border-top: 1px solid #eee;
 }
+
+.ver-detalle {
+  color: #d90000;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.ver-detalle:hover {
+  color: #b00000;
+  letter-spacing: 0.5px;
+  text-decoration: underline;
+}
+
 
 /* STATUS */
 .status {
@@ -249,8 +279,17 @@ td {
 
 .metrics-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.metrics-priority {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  max-width: 75%;  
+  margin: 0 auto;
 }
 
 .metric-card {
@@ -282,6 +321,27 @@ td {
   letter-spacing: 0.8px;
 }
 
+.metric-card.alta-card { 
+  border-left-color: #d90000; 
+}
+.metric-card.alta-card .metric-value { 
+  color: #d90000; 
+}
+
+.metric-card.media-card { 
+  border-left-color: #ff9800; 
+}
+.metric-card.media-card .metric-value { 
+  color: #ff9800; 
+}
+
+.metric-card.baja-card { 
+  border-left-color: #4caf50; 
+}
+.metric-card.baja-card .metric-value { 
+  color: #4caf50; 
+}
+
 .metric-value {
   font-size: 2.2rem;
   font-weight: 800;
@@ -289,12 +349,6 @@ td {
   margin: 5px 0;
 }
 
-.metric-unit {
-  font-size: 0.9rem;
-  color: #d90000; 
-  font-weight: bold;
-  margin-left: 4px;
-}
 
 .metric-count {
   font-size: 0.8rem;

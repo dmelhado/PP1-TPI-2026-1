@@ -14,6 +14,9 @@ export default function OperarioDashboard({ user }) {
     enTransito: 0,
     entregados: 0,
     cancelados: 0,
+    altaPrioridad: 0,   
+    mediaPrioridad: 0, 
+    bajaPrioridad: 0,
   });
 
   const [metricas, setMetricas] = useState(null);
@@ -75,7 +78,11 @@ export default function OperarioDashboard({ user }) {
           ["CANCELADO", "Cancelado"].includes(e.estadoEnvio)
         ).length;
 
-        setStats({ total, pendientes, enTransito, entregados, cancelados });
+        const altaPrioridad = data.filter((e) => e.prioridadEnvio === "ALTA").length;
+        const mediaPrioridad = data.filter((e) => e.prioridadEnvio === "MEDIA").length;
+        const bajaPrioridad = data.filter((e) => e.prioridadEnvio === "BAJA").length;
+
+        setStats({ total, pendientes, enTransito, entregados, cancelados, altaPrioridad, mediaPrioridad, bajaPrioridad });
 
         // Si es supervisor, obtener métricas
         if (user?.role === "supervisor") {
@@ -147,27 +154,37 @@ export default function OperarioDashboard({ user }) {
       {/* MÉTRICAS PARA SUPERVISORES */}
       {user?.role === "supervisor" && metricas && (
         <div className="metrics-section">
-          <h3>📊 Métricas de Operaciones</h3>
+          <h3>📊 Métricas de Envíos ({stats.total} {stats.total === 1 ? "envío" : "envíos totales"})</h3>
           <div className="metrics-grid">
             <div className="metric-card">
               <div className="metric-label">Envíos Pendientes</div>
-              <div className="metric-value">{metricas.porcentajePendientes.toFixed(1)}%</div>
-              <div className="metric-count">({stats.pendientes} envíos)</div>
+              <div className="metric-value">{stats.pendientes}</div>
             </div>
             <div className="metric-card">
               <div className="metric-label">En Tránsito</div>
-              <div className="metric-value">{metricas.porcentajeEnTransito.toFixed(1)}%</div>
-              <div className="metric-count">({stats.enTransito} envíos)</div>
+              <div className="metric-value">{stats.enTransito}</div>
             </div>
             <div className="metric-card">
               <div className="metric-label">Entregados</div>
-              <div className="metric-value">{metricas.porcentajeEntregados.toFixed(1)}%</div>
-              <div className="metric-count">({stats.entregados} envíos)</div>
+              <div className="metric-value">{stats.entregados}</div>
             </div>
             <div className="metric-card">
               <div className="metric-label">Cancelados</div>
-              <div className="metric-value">{metricas.porcentajeCancelados.toFixed(1)}%</div>
-              <div className="metric-count">({stats.cancelados} envíos)</div>
+              <div className="metric-value">{stats.cancelados}</div>
+            </div>
+          </div>
+          <div className="metrics-grid metrics-priority">
+            <div className="metric-card alta-card">
+              <div className="metric-label">Alta Prioridad</div>
+              <div className="metric-value">{stats.altaPrioridad}</div>
+            </div>
+            <div className="metric-card media-card">
+              <div className="metric-label">Media Prioridad</div>
+              <div className="metric-value">{stats.mediaPrioridad}</div>
+            </div>
+            <div className="metric-card baja-card">
+              <div className="metric-label">Baja Prioridad</div>
+              <div className="metric-value">{stats.bajaPrioridad}</div>
             </div>
           </div>
         </div>
@@ -204,9 +221,14 @@ export default function OperarioDashboard({ user }) {
 
       <div className="table">
         <div className="table-header">
-          <h3>Envíos ({filteredShipments.length})</h3>
-          <button>Ver todos →</button>
-        </div>
+          <h3>
+            📦 Listado de Envíos 
+            <span style={{ fontSize: '0.9rem', color: '#888', fontWeight: 'normal' }}>
+              ({filteredShipments.length} encontrados)
+            </span>
+          </h3>
+        <button>Ver todos →</button>
+      </div>
 
         {filteredShipments.length > 0 ? (
           <table>
@@ -231,11 +253,10 @@ export default function OperarioDashboard({ user }) {
                     </span>
                   </td>
                   <td className="action">
-                    {/* Wrap the text in a Link component */}
-                    <Link to={`/shipment/${s.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                      Ver detalle →
-                    </Link>
-                  </td>
+                      <Link to={`/shipment/${s.id}`} className="ver-detalle">
+                          Ver detalle →
+                      </Link>
+                    </td>
                 </tr>
               ))}
             </tbody>
