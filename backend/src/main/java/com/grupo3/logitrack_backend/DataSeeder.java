@@ -1,9 +1,10 @@
-package com.grupo3.test;
+package com.grupo3.logitrack_backend;
 
-import com.grupo3.test.model.*;
-import com.grupo3.test.service.EnvioService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+
+import com.grupo3.logitrack_backend.model.*;
+import com.grupo3.logitrack_backend.service.EnvioService;
 
 @Component
 public class DataSeeder implements CommandLineRunner {

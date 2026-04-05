@@ -1,7 +1,9 @@
-package com.grupo3.test.repository;
+package com.grupo3.logitrack_backend.repository;
 
-import com.grupo3.test.model.HistorialEstado;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.grupo3.logitrack_backend.model.HistorialEstado;
+
 import java.util.List;
 
 public interface HistorialEstadoRepository extends JpaRepository<HistorialEstado, Long> {

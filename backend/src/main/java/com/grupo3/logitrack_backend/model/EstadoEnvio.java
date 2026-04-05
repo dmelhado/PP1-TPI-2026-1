@@ -1,4 +1,4 @@
-package com.grupo3.test.model;
+package com.grupo3.logitrack_backend.model;
 
 import java.util.EnumSet;
 import java.util.Set;

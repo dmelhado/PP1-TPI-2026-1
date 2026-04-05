@@ -1,4 +1,4 @@
-package com.grupo3.test.controller;
+package com.grupo3.logitrack_backend.controller;
 
 import java.util.Map;
 

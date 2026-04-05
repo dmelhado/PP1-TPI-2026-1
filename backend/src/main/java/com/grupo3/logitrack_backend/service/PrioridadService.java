@@ -1,7 +1,9 @@
-package com.grupo3.test.service;
+package com.grupo3.logitrack_backend.service;
 
-import com.grupo3.test.model.Prioridad;
 import org.springframework.stereotype.Service;
+
+import com.grupo3.logitrack_backend.model.Prioridad;
+
 import smile.classification.RandomForest;
 import java.io.*;
 
