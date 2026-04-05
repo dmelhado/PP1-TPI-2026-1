@@ -70,3 +70,11 @@ java -cp "out;lib/*" TrainModel
 ```
 
 La ejecución generará el archivo "priorityModel.ser" dentro de la carpeta ML, el cual deberá ser copiado a la carpeta resources en backend para la correcta inicialización de Spring Boot.
+
+## Como testear backend?
+```bash
+cd backend
+./mvnw test -Dtest=EnvioServiceTest
+```
+
+Por el momento no es posible testear directamente dentro de VS Code
