@@ -1,8 +1,10 @@
-package com.grupo3.test.repository;
+package com.grupo3.logitrack_backend.repository;
 
-import com.grupo3.test.model.Envio;
-import com.grupo3.test.model.EstadoEnvio;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.grupo3.logitrack_backend.model.Envio;
+import com.grupo3.logitrack_backend.model.EstadoEnvio;
+
 import java.util.List;
 import java.util.Optional;
 

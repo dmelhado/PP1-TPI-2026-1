@@ -1,13 +1,13 @@
-package com.grupo3.test;
+package com.grupo3.logitrack_backend;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class TestApplication {
+public class RunApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(TestApplication.class, args);
+		SpringApplication.run(RunApplication.class, args);
 	}
 
 }

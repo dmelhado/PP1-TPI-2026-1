@@ -1,4 +1,4 @@
-package com.grupo3.test.controller;
+package com.grupo3.logitrack_backend.controller;
 
 import java.util.List;
 import java.util.Map;
@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.grupo3.test.model.Envio;
-import com.grupo3.test.model.EstadoEnvio;
-import com.grupo3.test.model.HistorialEstado;
-import com.grupo3.test.model.MetricasDTO;
-import com.grupo3.test.service.EnvioService;
+import com.grupo3.logitrack_backend.model.Envio;
+import com.grupo3.logitrack_backend.model.EstadoEnvio;
+import com.grupo3.logitrack_backend.model.HistorialEstado;
+import com.grupo3.logitrack_backend.model.MetricasDTO;
+import com.grupo3.logitrack_backend.service.EnvioService;
 
 @RestController
 @RequestMapping("/api/envios")

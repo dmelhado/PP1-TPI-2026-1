@@ -1,4 +1,17 @@
 {
     "java.compile.nullAnalysis.mode": "automatic",
-    "java.configuration.updateBuildConfiguration": "interactive"
+    "java.configuration.updateBuildConfiguration": "interactive",
+
+    "java.test.config": [
+        {
+            "name": "Spring Boot Test",
+            "workingDirectory": "${workspaceFolder}/backend",
+            "vmargs": [],
+            "args": [],
+            "env": {
+                "spring.profiles.active": "test"
+            }
+        }
+    ],
+    "java.test.defaultConfig": "Spring Boot Test"
 }

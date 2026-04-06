@@ -1,4 +1,4 @@
-package com.grupo3.test.config;
+package com.grupo3.logitrack_backend.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

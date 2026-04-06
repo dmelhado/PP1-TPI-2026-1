@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.grupo3</groupId>
-	<artifactId>test</artifactId>
+	<artifactId>logitrack_backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name/>
 	<description/>
@@ -73,18 +73,6 @@
 			<groupId>com.github.haifengl</groupId>
 			<artifactId>smile-core</artifactId>
 			<version>5.2.2</version>
-		</dependency>
-
-		<!-- Dependencia para Apache Commons CSV -->
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-csv</artifactId>
-			<version>1.10.0</version>
-		</dependency>
-		<dependency>
-    		<groupId>commons-io</groupId>
-    		<artifactId>commons-io</artifactId>
-    		<version>2.15.1</version>
 		</dependency>
 
 	</dependencies>

@@ -1,4 +1,4 @@
-package com.grupo3.test.service;
+package com.grupo3.logitrack_backend.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -6,9 +6,9 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.grupo3.test.model.*;
-import com.grupo3.test.repository.EnvioRepository;
-import com.grupo3.test.repository.HistorialEstadoRepository;
+import com.grupo3.logitrack_backend.model.*;
+import com.grupo3.logitrack_backend.repository.EnvioRepository;
+import com.grupo3.logitrack_backend.repository.HistorialEstadoRepository;
 
 @Service
 public class EnvioService {
