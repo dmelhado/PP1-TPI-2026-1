@@ -5,6 +5,7 @@ import LogiTrackLogo from "../assets/LogiTrack_Logo_colored.png";
 
 export default function Login({ onLogin }) {
   const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [role, setRole] = useState("Operario");
   const [error, setError] = useState("");
 
@@ -13,6 +14,10 @@ export default function Login({ onLogin }) {
 
     if (!username.trim()) {
       setError("Por favor, ingresa una credencial válida.");
+      return;
+    }
+    if (!password.trim()) {
+     setError("Por favor ingresá tu contraseña");
       return;
     }
     // fake login → send data to App.jsx
@@ -42,6 +47,13 @@ export default function Login({ onLogin }) {
             placeholder="Ingresa tu nombre de usuario"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+          />
+          <label>Contraseña</label>
+          <input
+            type="password"
+            placeholder="Ingrese su contraseña"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
 
           <label>Selecciona tu rol</label>

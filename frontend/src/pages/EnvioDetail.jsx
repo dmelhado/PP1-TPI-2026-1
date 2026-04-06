@@ -101,7 +101,7 @@ export default function EnvioDetail({ user }) {
         </div>
         <div className="header-badges">
           <span className={`badge status-${shipment.estadoEnvio.toLowerCase()}`}>
-            {shipment.estadoEnvio}
+            {formatearEstado(shipment.estadoEnvio)}
           </span>
           <span className={`badge priority-${shipment.prioridadEnvio.toLowerCase()}`}>
             Prioridad: {shipment.prioridadEnvio}
@@ -247,7 +247,7 @@ export default function EnvioDetail({ user }) {
                 <label>Operario</label>
                 <p>{shipment.creadoPor}</p>
               </div>
-              <div className="date-item">
+              <div className="control-item">
                 <label>Tipo de Envío</label>
                 <p>{shipment.tipoEnvio}</p>
               </div>
