@@ -8,7 +8,7 @@ on:
 
 jobs:
   backend:
-    name: Build and Lint Backend
+    name: Build, Lint and Test Backend
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -19,7 +19,7 @@ jobs:
           distribution: 'temurin'
       - name: Compilar con Maven
         working-directory: ./backend
-        run: chmod +x mvnw && ./mvnw clean compile -q
+        run: chmod +x mvnw && ./mvnw clean verify -Dspring.profiles.active=test -q
 
   frontend:
     name: Build and Lint Frontend
