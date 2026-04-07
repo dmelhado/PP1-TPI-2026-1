@@ -11,19 +11,13 @@ Instalar las siguientes dependencias:
 
 * **Java JDK 25+** (Recomendado Eclipse Temurin 25)
 * **Node.js 24 (LTS)**
-* **npm** (incluido con Node.js)
-* **SMILE** (incluido en este repo)
 * **Git**
-
-Opcional pero recomendado:
-
-* **Maven** o usar el wrapper (`mvnw`) incluido en el backend
 
 ### 2. Clonar el repositorio
 
 ```bash
 git clone https://github.com/dmelhado/PP1-TPI-2026-1.git
-cd PP1-TPI-2026-1.git
+cd PP1-TPI-2026-1
 ```
 ### 3. Ejecutar el Backend
 
@@ -78,3 +72,5 @@ cd backend
 ```
 
 Por el momento no es posible testear directamente dentro de VS Code
+
+## [Video de demostración](https://drive.google.com/file/d/1ZJw2qMTa4ZHFssS1YlSfbilTZP85dQ7L/view?usp=sharing)
